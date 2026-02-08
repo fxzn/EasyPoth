@@ -26,5 +26,4 @@
 <script setup lang="ts">
 import Footer from "./footer/Footer.vue";
 import Navbar from "./navbar/Navbar.vue";
-import NotFound from "./notfound/NotFound.vue";
 </script>

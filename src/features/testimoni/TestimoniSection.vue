@@ -97,7 +97,15 @@
 import { ref, computed } from "vue";
 import testiImage from "../../assets/images/photo.svg";
 
-const testimonials = ref([
+type Testimonial = {
+  id: number;
+  name: string;
+  role: string;
+  quote: string;
+  image: string;
+};
+
+const testimonials = ref<Testimonial[]>([
   {
     id: 1,
     name: "Kevin",
@@ -126,9 +134,27 @@ const testimonials = ref([
 
 const currentIndex = ref(0);
 
-const currentTestimonial = computed(
-  () => testimonials.value[currentIndex.value],
-);
+// const currentTestimonial = computed<Testimonial>( () => {
+//   return testimonials.value[currentIndex.value] ?? testimonials.value[0];
+// });
+
+const currentTestimonial = computed<Testimonial>(() => {
+  const list = testimonials.value;
+
+  const item = list[currentIndex.value];
+
+  if (!item) {
+    return {
+      id: 0,
+      name: "No Data",
+      role: "",
+      quote: "Belum ada testimoni.",
+      image: "",
+    };
+  }
+
+  return item;
+});
 
 const nextTestimonial = () => {
   currentIndex.value = (currentIndex.value + 1) % testimonials.value.length;
