@@ -129,7 +129,7 @@
         >
           <img
             :src="heroImage"
-            alt="Hero Image"
+            alt="Contoh hasil photobooth online dengan berbagai pilihan grid frame estetik"
             class="w-full h-full object-cover object-top"
           />
         </div>
@@ -159,7 +159,11 @@
 
     <div class="flex justify-center">
       <div class="w-[360px] h-[620px] overflow-hidden rounded-t-3xl">
-        <img :src="heroImage" class="w-full h-full object-cover object-top" />
+        <img
+          :src="heroImage"
+          alt="Koleksi frame foto photobooth EasyPoth"
+          class="w-full h-full object-cover object-top"
+        />
       </div>
     </div>
 
