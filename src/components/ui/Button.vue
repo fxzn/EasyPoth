@@ -36,7 +36,7 @@ const sizeClasses: Record<ButtonSize, string> = {
   xl: 'px-9 py-7 text-lg',        
 };
 
-const buttonClasses = computed(() => ['btn', props.variant ?? '', sizeClasses[props.size ?? 'sm'], 'rounded-full font-normal']);
+const buttonClasses = computed(() => ['btn', props.variant ?? '', sizeClasses[props.size ?? 'sm'], 'rounded-full']);
 </script>
 
 <style scoped></style>

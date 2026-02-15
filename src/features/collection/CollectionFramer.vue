@@ -1,14 +1,16 @@
 <template>
   <div class="pt-16 pb-16">
     <!-- Header -->
-    <div class="flex items-center justify-between mb-8">
+    <div
+      class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between mb-8"
+    >
       <div class="flex items-center gap-8">
         <h1 class="text-[42px] font-medium">Koleksi frame</h1>
 
         <!-- View Toggle Buttons -->
         <div class="flex items-center gap-2">
           <button
-            class="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white"
+            class="group w-10 h-10 rounded-full border border-[#C8C8C8] hover:bg-purple-600 hover:border-purple-600 flex items-center justify-center transition-all duration-200"
           >
             <svg
               width="17"
@@ -19,13 +21,13 @@
             >
               <path
                 d="M15 0H1.5C1.10218 0 0.720644 0.158035 0.43934 0.43934C0.158035 0.720644 0 1.10218 0 1.5V15C0 15.3978 0.158035 15.7794 0.43934 16.0607C0.720644 16.342 1.10218 16.5 1.5 16.5H15C15.3978 16.5 15.7794 16.342 16.0607 16.0607C16.342 15.7794 16.5 15.3978 16.5 15V1.5C16.5 1.10218 16.342 0.720644 16.0607 0.43934C15.7794 0.158035 15.3978 0 15 0ZM15 7.5H9V1.5H15V7.5ZM7.5 1.5V7.5H1.5V1.5H7.5ZM1.5 9H7.5V15H1.5V9ZM15 15H9V9H15V15Z"
-                fill="white"
+                class="fill-[#232323] group-hover:fill-white transition-colors duration-200"
               />
             </svg>
           </button>
 
           <button
-            class="w-10 h-10 rounded-full border border-[#C8C8C8] hover:bg-gray-200 flex items-center justify-center"
+            class="group w-10 h-10 rounded-full border border-[#C8C8C8] hover:bg-purple-600 hover:border-purple-600 flex items-center justify-center transition-all duration-200"
           >
             <svg
               width="17"
@@ -36,13 +38,13 @@
             >
               <path
                 d="M15 0H1.5C1.10218 0 0.720644 0.158035 0.43934 0.43934C0.158035 0.720644 0 1.10218 0 1.5V15C0 15.3978 0.158035 15.7794 0.43934 16.0607C0.720644 16.342 1.10218 16.5 1.5 16.5H15C15.3978 16.5 15.7794 16.342 16.0607 16.0607C16.342 15.7794 16.5 15.3978 16.5 15V1.5C16.5 1.10218 16.342 0.720644 16.0607 0.43934C15.7794 0.158035 15.3978 0 15 0ZM15 7.5H9V1.5H15V7.5ZM7.5 1.5V7.5H1.5V1.5H7.5ZM1.5 9H7.5V15H1.5V9ZM15 15H9V9H15V15Z"
-                fill="#232323"
+                class="fill-[#232323] group-hover:fill-white transition-colors duration-200"
               />
             </svg>
           </button>
 
           <button
-            class="w-10 h-10 rounded-full border border-[#C8C8C8] hover:bg-gray-200 flex items-center justify-center"
+            class="group w-10 h-10 rounded-full border border-[#C8C8C8] hover:bg-purple-600 hover:border-purple-600 flex items-center justify-center transition-all duration-200"
           >
             <svg
               width="17"
@@ -53,13 +55,13 @@
             >
               <path
                 d="M15 0H1.5C1.10218 0 0.720644 0.158035 0.43934 0.43934C0.158035 0.720644 0 1.10218 0 1.5V15C0 15.3978 0.158035 15.7794 0.43934 16.0607C0.720644 16.342 1.10218 16.5 1.5 16.5H15C15.3978 16.5 15.7794 16.342 16.0607 16.0607C16.342 15.7794 16.5 15.3978 16.5 15V1.5C16.5 1.10218 16.342 0.720644 16.0607 0.43934C15.7794 0.158035 15.3978 0 15 0ZM15 7.5H9V1.5H15V7.5ZM7.5 1.5V7.5H1.5V1.5H7.5ZM1.5 9H7.5V15H1.5V9ZM15 15H9V9H15V15Z"
-                fill="#232323"
+                class="fill-[#232323] group-hover:fill-white transition-colors duration-200"
               />
             </svg>
           </button>
 
           <button
-            class="w-10 h-10 rounded-full border border-[#C8C8C8] hover:bg-gray-200 flex items-center justify-center"
+            class="group w-10 h-10 rounded-full border border-[#C8C8C8] hover:bg-purple-600 hover:border-purple-600 flex items-center justify-center transition-all duration-200"
           >
             <svg
               width="17"
@@ -70,7 +72,7 @@
             >
               <path
                 d="M15 0H1.5C1.10218 0 0.720644 0.158035 0.43934 0.43934C0.158035 0.720644 0 1.10218 0 1.5V15C0 15.3978 0.158035 15.7794 0.43934 16.0607C0.720644 16.342 1.10218 16.5 1.5 16.5H15C15.3978 16.5 15.7794 16.342 16.0607 16.0607C16.342 15.7794 16.5 15.3978 16.5 15V1.5C16.5 1.10218 16.342 0.720644 16.0607 0.43934C15.7794 0.158035 15.3978 0 15 0ZM15 7.5H9V1.5H15V7.5ZM7.5 1.5V7.5H1.5V1.5H7.5ZM1.5 9H7.5V15H1.5V9ZM15 15H9V9H15V15Z"
-                fill="#232323"
+                class="fill-[#232323] group-hover:fill-white transition-colors duration-200"
               />
             </svg>
           </button>
@@ -78,10 +80,15 @@
       </div>
 
       <!-- Search Bar -->
-      <div class="flex items-center gap-16 border-b-1 border-gray-900 pb-1">
+      <div
+        class="flex items-center justify-between border-b border-gray-900 pb-1 w-full md:w-auto md:min-w-[280px]"
+      >
         <input
+          id="search"
+          name="search"
           type="text"
           placeholder="CARI DISINI"
+          autocomplete="off"
           class="outline-none bg-transparent text-sm tracking-wider"
           v-model="searchQuery"
         />
@@ -101,7 +108,7 @@
     </div>
 
     <!-- Grid Layout -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
       <div
         v-for="item in frames"
         :key="item.id"
@@ -189,73 +196,70 @@
 
     <!-- Pagination -->
     <div class="flex items-center justify-between mt-12">
-      <!-- Page Numbers (Left) -->
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-1 md:gap-2">
         <button
-          class="w-12 h-12 rounded-full bg-purple-600 text-white font-medium text-sm"
+          class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-[#7C3AED] text-white font-medium text-xs md:text-sm"
         >
           01
         </button>
         <button
-          class="w-12 h-12 rounded-full border border-gray-300 hover:border-gray-400 font-medium text-sm transition-colors"
+          class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-300 hover:border-gray-400 font-medium text-xs md:text-sm transition-colors"
         >
           02
         </button>
         <button
-          class="w-12 h-12 rounded-full border border-gray-300 hover:border-gray-400 font-medium text-sm transition-colors"
+          class="w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-300 hover:border-gray-400 font-medium text-xs md:text-sm transition-colors"
         >
           03
         </button>
+
         <button
-          class="w-12 h-12 rounded-full border border-gray-300 hover:border-gray-400 font-medium text-sm transition-colors"
+          class="hidden md:flex w-12 h-12 rounded-full border border-gray-300 hover:border-gray-400 items-center justify-center font-medium text-sm transition-colors"
         >
           04
         </button>
         <button
-          class="w-12 h-12 rounded-full border border-gray-300 hover:border-gray-400 font-medium text-sm transition-colors"
+          class="hidden md:flex w-12 h-12 rounded-full border border-gray-300 hover:border-gray-400 items-center justify-center font-medium text-sm transition-colors"
         >
           05
         </button>
-        <span class="px-2 text-gray-400">...</span>
+        <span class="hidden md:block px-2 text-gray-400">...</span>
         <button
-          class="w-12 h-12 rounded-full border border-gray-300 hover:border-gray-400 font-medium text-sm transition-colors"
+          class="hidden md:flex w-12 h-12 rounded-full border border-gray-300 hover:border-gray-400 items-center justify-center font-medium text-sm transition-colors"
         >
           10
         </button>
       </div>
 
-      <!-- Navigation Buttons (Right) -->
       <div class="flex items-center gap-2">
         <button
-          class="w-12 h-12 rounded-full border border-gray-300 hover:border-gray-400 flex items-center justify-center transition-colors"
+          class="group w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-300 hover:bg-[#ebe5f6] hover:border-[#ebe5f6] flex items-center justify-center transition-all duration-200"
         >
           <svg
-            width="23"
-            height="23"
+            class="w-5 h-5 md:w-[23px] md:h-[23px]"
             viewBox="0 0 23 23"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
+              class="fill-[#232323] group-hover:fill-[#7C3AED] transition-colors duration-200"
               d="M21.0835 12.4584L21.0836 10.5418H5.58544L9.37058 6.75665L8.0153 5.40137L1.9165 11.5002L8.0153 17.599L9.37058 16.2436L5.58539 12.4585L21.0835 12.4584Z"
-              fill="#232323"
             />
           </svg>
         </button>
 
         <button
-          class="w-12 h-12 rounded-full bg-[#ebe5f6] flex items-center justify-center transition-colors"
+          class="group w-10 h-10 md:w-12 md:h-12 rounded-full border border-gray-300 hover:bg-[#ebe5f6] hover:border-[#ebe5f6] flex items-center justify-center transition-all duration-200"
         >
           <svg
-            width="23"
-            height="23"
+            class="w-5 h-5 md:w-[23px] md:h-[23px]"
             viewBox="0 0 23 23"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
+              class="fill-[#232323] group-hover:fill-[#7C3AED] transition-colors duration-200"
               d="M1.91664 12.4584L1.9165 10.5418H17.4146L13.6294 6.75665L14.9847 5.40137L21.0836 11.5002L14.9847 17.599L13.6294 16.2436L17.4147 12.4585L1.91664 12.4584Z"
-              fill="#7C3AED"
             />
           </svg>
         </button>

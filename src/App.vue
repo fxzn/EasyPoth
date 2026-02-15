@@ -1,13 +1,12 @@
 <template>
   <MainLayout>
-    <!-- HERO: rapi tapi image bebas -->
+
     <section class="relative">
       <Container>
         <HeroSection />
       </Container>
     </section>
 
-    <!-- <Hero/> -->
     <Banner />
 
     <section class="relative">
