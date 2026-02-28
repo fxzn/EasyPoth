@@ -577,7 +577,11 @@ async function flipCamera() {
 function toggleTimer() {
   const options = [0, 3, 10];
   const idx = options.indexOf(timerSeconds.value);
-  timerSeconds.value = options[(idx + 1) % options.length];
+  const next = options[(idx + 1) % options.length];
+
+  if (next !== undefined) {
+    timerSeconds.value = next;
+  }
 }
 
 async function takePhoto() {
@@ -643,6 +647,9 @@ async function downloadResult() {
   ctx.fill();
 
   for (let i = 0; i < capturedPhotos.value.length; i++) {
+    const photo = capturedPhotos.value[i];
+    if (!photo) continue;
+
     const col = i % grid.cols;
     const row = Math.floor(i / grid.cols);
     const x = PAD + col * (CELL_W + GAP);
@@ -659,7 +666,7 @@ async function downloadResult() {
         ctx.restore();
         resolve();
       };
-      img.src = capturedPhotos.value[i];
+      img.src = photo;
     });
   }
 
