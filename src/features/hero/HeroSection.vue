@@ -35,7 +35,6 @@
         >
           Coba sekarang
         </Button>
-
         <Button
           class="bg-white border border-gray-200 text-gray-800 font-medium rounded-full py-4 px-8 text-sm md:text-base flex items-center justify-center gap-2 hover:bg-gray-50 transition-all w-full"
         >
@@ -146,45 +145,78 @@
 
   <!-- ─── MODAL 1: Pilih Frame ─────────────────────────────────────────── -->
   <dialog ref="frameModalRef" class="modal modal-middle">
-    <div class="modal-box max-w-md p-5 rounded-[16px] bg-white shadow-2xl">
-      <h3 class="text-2xl font-medium text-gray-900 mb-8 text-center">
+    <div class="modal-box max-w-lg p-5 rounded-[16px] bg-white shadow-2xl">
+      <h3 class="text-2xl font-medium text-gray-900 mb-6 text-center">
         Pilih frame yang tersedia
       </h3>
 
-      <div class="grid grid-cols-2 gap-x-4 gap-y-8">
-        <div
-          v-for="grid in gridOptions"
-          :key="grid.id"
-          class="space-y-3 cursor-pointer"
-          @click="selectedGrid = grid.id"
+      <!-- ── Pilih Tema ── -->
+      <div class="mb-6">
+        <p
+          class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3"
         >
-          <p class="text-[15px] font-medium text-gray-900">{{ grid.label }}</p>
-          <div
+          Tema Motif
+        </p>
+        <div class="grid grid-cols-4 gap-2">
+          <button
+            v-for="theme in themeOptions"
+            :key="theme.id"
+            @click="selectedTheme = theme.id"
             :class="[
-              'aspect-[3/4] rounded-[12px] border-2 transition-all p-4',
-              selectedGrid === grid.id
-                ? 'bg-[#F5EFFF] border-[#DDD6FE]'
-                : 'bg-[#F3F4F6] border-gray-100',
+              'flex flex-col items-center gap-1.5 py-3 px-2 rounded-xl border-2 transition-all text-xs font-medium',
+              selectedTheme === theme.id
+                ? 'border-violet-400 bg-violet-50 text-violet-700'
+                : 'border-gray-100 bg-gray-50 text-gray-500 hover:bg-gray-100',
             ]"
           >
+            <span class="text-xl">{{ theme.icon }}</span>
+            <span class="leading-tight text-center">{{ theme.name }}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Pilih Grid ── -->
+      <div class="mb-2">
+        <p
+          class="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3"
+        >
+          Tipe Grid
+        </p>
+        <div class="grid grid-cols-2 gap-x-4 gap-y-6">
+          <div
+            v-for="grid in gridOptions"
+            :key="grid.id"
+            class="space-y-3 cursor-pointer"
+            @click="selectedGrid = grid.id"
+          >
+            <p class="text-[15px] font-medium text-gray-900">
+              {{ grid.label }}
+            </p>
             <div
               :class="[
-                'w-full h-full bg-white rounded-xl shadow-sm p-3 grid gap-1.5',
-                grid.colsClass,
-                grid.rowsClass,
+                'aspect-[3/4] rounded-[12px] border-2 transition-all p-4',
+                selectedGrid === grid.id
+                  ? 'bg-[#F5EFFF] border-[#DDD6FE]'
+                  : 'bg-[#F3F4F6] border-gray-100',
               ]"
             >
+              <!-- Mini preview frame motif -->
               <div
-                v-for="i in grid.cells"
-                :key="i"
-                class="bg-gray-100 rounded-md"
-              ></div>
+                class="relative w-full h-full rounded-xl overflow-hidden shadow-sm"
+              >
+                <canvas
+                  :ref="
+                    (el) => setMiniCanvasRef(el as HTMLCanvasElement, grid.id)
+                  "
+                  class="w-full h-full"
+                ></canvas>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="modal-action mt-10 flex flex-col gap-2">
+      <div class="modal-action mt-8 flex flex-col gap-2">
         <button
           :disabled="!selectedGrid"
           @click="startCamera"
@@ -216,7 +248,6 @@
     <div
       class="modal-box max-w-md p-0 rounded-[20px] bg-[#0F0F13] overflow-hidden shadow-2xl"
     >
-      <!-- Header -->
       <div class="flex items-center justify-between px-5 py-4">
         <button
           @click="stopCamera"
@@ -248,7 +279,6 @@
         <div class="w-6"></div>
       </div>
 
-      <!-- Progress dots -->
       <div class="flex justify-center gap-2 pb-3">
         <div
           v-for="i in activeGrid?.cells ?? 0"
@@ -264,7 +294,6 @@
         ></div>
       </div>
 
-      <!-- Viewfinder -->
       <div class="relative mx-4 mb-4 rounded-xl overflow-hidden bg-black">
         <video
           ref="videoEl"
@@ -275,7 +304,6 @@
           :class="{ 'scale-x-[-1]': isFrontCamera }"
         ></video>
 
-        <!-- Captured thumbnails overlay -->
         <div
           v-if="activeGrid && capturedPhotos.length > 0"
           :class="[
@@ -301,7 +329,6 @@
           </div>
         </div>
 
-        <!-- Countdown -->
         <Transition name="countdown">
           <div
             v-if="countdown > 0"
@@ -313,7 +340,6 @@
           </div>
         </Transition>
 
-        <!-- Flash -->
         <Transition name="flash">
           <div
             v-if="showFlash"
@@ -322,7 +348,6 @@
         </Transition>
       </div>
 
-      <!-- Controls -->
       <div class="flex items-center justify-between px-8 pb-6">
         <button
           @click="flipCamera"
@@ -437,7 +462,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, watch, nextTick } from "vue";
 import heroImage from "../../assets/images/heroImage.svg";
 import Button from "../../components/ui/Button.vue";
 
@@ -448,10 +473,18 @@ const stats = [
   { value: "50+", label: "Contributor" },
 ];
 
+// ─── Theme Options ─────────────────────────────────────────────────────────────
+const themeOptions = [
+  { id: "floral", icon: "🌸", name: "Floral Pink" },
+  { id: "botanical", icon: "🌿", name: "Botanical" },
+  { id: "gold", icon: "✨", name: "Glitter Gold" },
+  { id: "kawaii", icon: "🎀", name: "Y2K Kawaii" },
+];
+
 // ─── Grid Options ──────────────────────────────────────────────────────────────
 const gridOptions = [
   {
-    id: "1x1 Grid",
+    id: "1x1",
     label: "1×1 Grid",
     cells: 1,
     colsClass: "grid-cols-1",
@@ -460,7 +493,7 @@ const gridOptions = [
     rows: 1,
   },
   {
-    id: "2x2 Grid",
+    id: "2x2",
     label: "2×2 Grid",
     cells: 4,
     colsClass: "grid-cols-2",
@@ -469,7 +502,7 @@ const gridOptions = [
     rows: 2,
   },
   {
-    id: "3x1 Grid",
+    id: "3x1",
     label: "3×1 Grid",
     cells: 3,
     colsClass: "grid-cols-1",
@@ -478,7 +511,7 @@ const gridOptions = [
     rows: 3,
   },
   {
-    id: "3x2 Grid",
+    id: "3x2",
     label: "3×2 Grid",
     cells: 6,
     colsClass: "grid-cols-2",
@@ -489,7 +522,8 @@ const gridOptions = [
 ];
 
 // ─── State ─────────────────────────────────────────────────────────────────────
-const selectedGrid = ref("3x2 Grid");
+const selectedTheme = ref<string>("floral");
+const selectedGrid = ref<string>("3x1");
 const capturedPhotos = ref<string[]>([]);
 const isFrontCamera = ref(true);
 const isCapturing = ref(false);
@@ -507,41 +541,714 @@ const cameraModalRef = ref<HTMLDialogElement | null>(null);
 const previewModalRef = ref<HTMLDialogElement | null>(null);
 const videoEl = ref<HTMLVideoElement | null>(null);
 const canvasEl = ref<HTMLCanvasElement | null>(null);
-let stream: MediaStream | null = null;
 
-// ─── Grid helper (kept for backward compat if used elsewhere) ──────────────────
-// function gridConfig(grid: string) {
-//   const config: Record<string, { cols: string; rows: string; count: number }> = {
-//     "1x1 Grid": { cols: "grid-cols-1", rows: "grid-rows-1", count: 1 },
-//     "2x2 Grid": { cols: "grid-cols-2", rows: "grid-rows-2", count: 4 },
-//     "3x1 Grid": { cols: "grid-cols-1", rows: "grid-rows-3", count: 3 },
-//     "3x2 Grid": { cols: "grid-cols-2", rows: "grid-rows-3", count: 6 },
-//   };
-//   return config[grid] ?? { cols: "grid-cols-1", rows: "grid-rows-1", count: 1 };
-// }
+// Map: gridId → canvas element (untuk mini preview di modal)
+const miniCanvasMap = ref<Record<string, HTMLCanvasElement>>({});
+
+function setMiniCanvasRef(el: HTMLCanvasElement | null, gridId: string) {
+  if (el) miniCanvasMap.value[gridId] = el;
+}
+
+// ─── Frame Drawing Engine ──────────────────────────────────────────────────────
+
+type ThemeKey = "floral" | "botanical" | "gold" | "kawaii";
+
+interface ThemeDef {
+  colors: string[];
+  accent: string;
+  dark: string;
+}
+
+const THEMES: Record<ThemeKey, ThemeDef> = {
+  floral: {
+    colors: ["#fde8ef", "#f5dde8", "#fef0f5"],
+    accent: "#e8a0b4",
+    dark: "#c05070",
+  },
+  botanical: {
+    colors: ["#e4f0de", "#d8eccc", "#eef6e8"],
+    accent: "#72b85a",
+    dark: "#3a7830",
+  },
+  gold: {
+    colors: ["#fdf4e0", "#faeac8", "#fef9ec"],
+    accent: "#d4a820",
+    dark: "#8c6808",
+  },
+  kawaii: {
+    colors: ["#f4e4fc", "#ecd8f8", "#f8f0fe"],
+    accent: "#c070e0",
+    dark: "#8030b0",
+  },
+};
+
+function rrect(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  r: number,
+) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+function drawFloralMotif(
+  ctx: CanvasRenderingContext2D,
+  W: number,
+  H: number,
+  t: ThemeDef,
+) {
+  const corners: [number, number, number, number][] = [
+    [0, 0, 0, 1.4],
+    [W, 0, Math.PI / 2, 1.3],
+    [0, H, -Math.PI / 2, 1.3],
+    [W, H, Math.PI, 1.4],
+    [W / 2, 0, 0, 0.75],
+    [W / 2, H, Math.PI, 0.75],
+    [0, H / 2, -Math.PI / 2, 0.6],
+    [W, H / 2, Math.PI / 2, 0.6],
+  ];
+  corners.forEach(([x, y, rot, sc]) => {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    ctx.scale(sc, sc);
+    drawFloralCluster(ctx, t.accent, t.dark);
+    ctx.restore();
+  });
+}
+
+function drawFloralCluster(
+  ctx: CanvasRenderingContext2D,
+  accent: string,
+  dark: string,
+) {
+  const leaves: [number, number, number, number][] = [
+    [25, 70, 55, 35],
+    [55, 95, 95, 55],
+    [8, 115, -18, 72],
+    [70, 55, 100, 25],
+  ];
+  leaves.forEach(([x1, y1, x2, y2]) => {
+    ctx.fillStyle = dark + "70";
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.bezierCurveTo(x1 + 28, y1 - 28, x2 + 18, y2 - 18, x2, y2);
+    ctx.bezierCurveTo(x2 - 12, y2 + 12, x1 + 8, y1 + 12, x1, y1);
+    ctx.fill();
+  });
+  const flowers = [
+    { x: 55, y: 32, r: 30 },
+    { x: 105, y: 65, r: 23 },
+    { x: 22, y: 72, r: 19 },
+    { x: 82, y: 100, r: 17 },
+  ];
+  flowers.forEach(({ x, y, r }) => {
+    for (let p = 0; p < 6; p++) {
+      const a = (p / 6) * Math.PI * 2;
+      ctx.fillStyle = accent + "d0";
+      ctx.beginPath();
+      ctx.ellipse(
+        x + Math.cos(a) * r * 0.75,
+        y + Math.sin(a) * r * 0.75,
+        r * 0.52,
+        r * 0.3,
+        a,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fill();
+    }
+    ctx.fillStyle = "#fffae0";
+    ctx.beginPath();
+    ctx.arc(x, y, r * 0.34, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = accent;
+    ctx.beginPath();
+    ctx.arc(x, y, r * 0.16, 0, Math.PI * 2);
+    ctx.fill();
+  });
+  const dots: [number, number][] = [
+    [40, 48],
+    [92, 38],
+    [112, 88],
+    [28, 98],
+  ];
+  dots.forEach(([x, y]) => {
+    ctx.fillStyle = dark + "cc";
+    ctx.beginPath();
+    ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function drawBotanicalMotif(
+  ctx: CanvasRenderingContext2D,
+  W: number,
+  H: number,
+  t: ThemeDef,
+) {
+  const configs: [number, number, number, number][] = [
+    [0, 0, 0, 1.5],
+    [W, 0, Math.PI / 2, 1.4],
+    [0, H, -Math.PI / 2, 1.4],
+    [W, H, Math.PI, 1.5],
+    [W * 0.45, 0, 0.1, 0.7],
+    [W * 0.55, H, Math.PI + 0.1, 0.7],
+    [0, H * 0.38, -Math.PI / 3, 0.65],
+    [W, H * 0.62, (Math.PI * 2) / 3, 0.65],
+  ];
+  configs.forEach(([x, y, rot, sc]) => {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    ctx.scale(sc, sc);
+    drawLeafFan(ctx, t.accent, t.dark);
+    ctx.restore();
+  });
+}
+
+function drawLeafFan(
+  ctx: CanvasRenderingContext2D,
+  accent: string,
+  dark: string,
+) {
+  const leaves = [
+    { cx: 55, cy: 55, rx: 85, ry: 22, a: -0.25 },
+    { cx: 38, cy: 88, rx: 72, ry: 19, a: 0.38 },
+    { cx: 80, cy: 78, rx: 95, ry: 21, a: -0.75 },
+    { cx: 28, cy: 48, rx: 62, ry: 17, a: 0.08 },
+    { cx: 72, cy: 112, rx: 68, ry: 17, a: 0.55 },
+    { cx: 95, cy: 42, rx: 58, ry: 15, a: -1.1 },
+  ];
+  leaves.forEach(({ cx, cy, rx, ry, a }) => {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(a);
+    const g = ctx.createLinearGradient(-rx, 0, rx, 0);
+    g.addColorStop(0, accent + "cc");
+    g.addColorStop(0.45, dark + "ee");
+    g.addColorStop(1, accent + "88");
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.moveTo(-rx, 0);
+    ctx.bezierCurveTo(-rx / 2, -ry * 1.6, rx / 2, -ry * 1.6, rx, 0);
+    ctx.bezierCurveTo(rx / 2, ry * 1.6, -rx / 2, ry * 1.6, -rx, 0);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,0.35)";
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(-rx + 12, 0);
+    ctx.lineTo(rx - 12, 0);
+    ctx.stroke();
+    ctx.restore();
+  });
+}
+
+function drawGoldMotif(
+  ctx: CanvasRenderingContext2D,
+  W: number,
+  H: number,
+  t: ThemeDef,
+) {
+  const layers = [
+    { off: 30, lw: 1, dash: [12, 8] },
+    { off: 55, lw: 2, dash: [] },
+    { off: 72, lw: 1, dash: [6, 6] },
+  ];
+  layers.forEach(({ off, lw, dash }) => {
+    ctx.strokeStyle = t.accent + "88";
+    ctx.lineWidth = lw;
+    ctx.setLineDash(dash);
+    rrect(ctx, off, off, W - off * 2, H - off * 2, 20);
+    ctx.stroke();
+  });
+  ctx.setLineDash([]);
+
+  const corners: [number, number, number][] = [
+    [0, 0, 0],
+    [W, 0, Math.PI / 2],
+    [0, H, -Math.PI / 2],
+    [W, H, Math.PI],
+  ];
+
+  corners.forEach(([x, y, rot]) => {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    drawGoldCorner(ctx, t.accent, t.dark);
+    ctx.restore();
+  });
+
+  const pts: [number, number][] = [
+    [W / 2, 65],
+    [W / 2, H - 65],
+    [W / 4, 90],
+    [(3 * W) / 4, 90],
+    [W / 4, H - 90],
+    [(3 * W) / 4, H - 90],
+  ];
+  pts.forEach(([x, y], i) => {
+    i % 2 === 0
+      ? drawStar(ctx, x, y, 16, 5, t.accent, t.dark)
+      : drawDiamond(ctx, x, y, 18, t.accent + "cc", t.dark);
+  });
+}
+
+function drawGoldCorner(
+  ctx: CanvasRenderingContext2D,
+  accent: string,
+  dark: string,
+) {
+  for (let i = 0; i < 7; i++) {
+    const a = (i / 6) * (Math.PI / 2),
+      len = 90 + i * 22;
+    ctx.strokeStyle = i % 2 === 0 ? accent : dark + "88";
+    ctx.lineWidth = i === 3 ? 3 : 1.5;
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo(Math.cos(a) * len, Math.sin(a) * len);
+    ctx.stroke();
+  }
+  const points: [number, number][] = [
+    [45, 45],
+    [78, 22],
+    [22, 78],
+  ];
+
+  points.forEach(([x, y]) => {
+    drawDiamond(ctx, x, y, 12, accent + "cc", dark);
+  });
+
+  ctx.strokeStyle = accent + "aa";
+  ctx.lineWidth = 2;
+
+  ctx.beginPath();
+  ctx.arc(0, 0, 100, 0, Math.PI / 2);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(0, 0, 78, 0, Math.PI / 2);
+  ctx.stroke();
+}
+function drawDiamond(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  s: number,
+  fill: string,
+  stroke: string,
+) {
+  ctx.fillStyle = fill;
+  ctx.strokeStyle = stroke;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(x, y - s);
+  ctx.lineTo(x + s * 0.6, y);
+  ctx.lineTo(x, y + s);
+  ctx.lineTo(x - s * 0.6, y);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+}
+
+function drawStar(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  r: number,
+  pts: number,
+  fill: string,
+  stroke: string,
+) {
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.beginPath();
+  for (let i = 0; i < pts * 2; i++) {
+    const a = (i / (pts * 2)) * Math.PI * 2 - Math.PI / 2;
+    const rad = i % 2 === 0 ? r : r * 0.38;
+    i === 0
+      ? ctx.moveTo(Math.cos(a) * rad, Math.sin(a) * rad)
+      : ctx.lineTo(Math.cos(a) * rad, Math.sin(a) * rad);
+  }
+  ctx.closePath();
+  ctx.fillStyle = fill;
+  ctx.fill();
+  ctx.strokeStyle = stroke;
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawKawaiiMotif(
+  ctx: CanvasRenderingContext2D,
+  W: number,
+  H: number,
+  t: ThemeDef,
+) {
+  const corners: [number, number, number][] = [
+    [0, 0, 0],
+    [W, 0, Math.PI / 2],
+    [0, H, -Math.PI / 2],
+    [W, H, Math.PI],
+  ];
+
+  corners.forEach(([x, y, rot]) => {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    drawKawaiiCorner(ctx, t.accent, t.dark);
+    ctx.restore();
+  });
+  const deco = [
+    { x: W / 2, y: 52, type: "heart", sz: 28 },
+    { x: W / 2, y: H - 52, type: "heart", sz: 28 },
+    { x: 58, y: H / 2, type: "star", sz: 22 },
+    { x: W - 58, y: H / 2, type: "star", sz: 22 },
+    { x: W / 3, y: 85, type: "bow" },
+    { x: (2 * W) / 3, y: 85, type: "bow" },
+    { x: W / 3, y: H - 85, type: "bow" },
+    { x: (2 * W) / 3, y: H - 85, type: "bow" },
+  ];
+  deco.forEach(({ x, y, type, sz = 20 }) => {
+    ctx.save();
+    ctx.translate(x, y);
+    if (type === "heart") drawHeart(ctx, sz, t.accent);
+    else if (type === "star")
+      drawStar(ctx, 0, 0, sz, 4, t.accent + "cc", t.dark);
+    else drawBow(ctx, t.accent, t.dark);
+    ctx.restore();
+  });
+}
+
+function drawKawaiiCorner(
+  ctx: CanvasRenderingContext2D,
+  accent: string,
+  dark: string,
+) {
+  ctx.fillStyle = accent + "44";
+  ctx.beginPath();
+  ctx.arc(45, 45, 58, 0, Math.PI * 2);
+  ctx.arc(85, 28, 44, 0, Math.PI * 2);
+  ctx.arc(108, 68, 38, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ⭐ FIX 1 — kasih type tuple
+  const stars: [number, number, number][] = [
+    [32, 30, 16],
+    [82, 18, 13],
+    [110, 58, 11],
+  ];
+
+  stars.forEach(([x, y, r]) => {
+    drawStar(ctx, x, y, r, 4, accent + "dd", dark);
+  });
+
+  // ⭐ FIX 2 — kasih type tuple
+  const dots: [number, number][] = [
+    [60, 80],
+    [92, 90],
+    [25, 72],
+  ];
+
+  dots.forEach(([x, y]) => {
+    ctx.fillStyle = dark + "99";
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+function drawHeart(ctx: CanvasRenderingContext2D, size: number, color: string) {
+  ctx.fillStyle = color + "e0";
+  ctx.beginPath();
+  ctx.moveTo(0, size * 0.32);
+  ctx.bezierCurveTo(
+    -size * 0.55,
+    -size * 0.28,
+    -size,
+    size * 0.12,
+    -size * 0.48,
+    size * 0.62,
+  );
+  ctx.lineTo(0, size);
+  ctx.lineTo(size * 0.48, size * 0.62);
+  ctx.bezierCurveTo(
+    size,
+    size * 0.12,
+    size * 0.55,
+    -size * 0.28,
+    0,
+    size * 0.32,
+  );
+  ctx.fill();
+}
+
+function drawBow(ctx: CanvasRenderingContext2D, accent: string, dark: string) {
+  ctx.fillStyle = accent + "dd";
+  ctx.strokeStyle = dark;
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.ellipse(-22, 0, 24, 13, -0.35, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.ellipse(22, 0, 24, 13, 0.35, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = dark + "cc";
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 9, 9, 0, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+/**
+ * Core: render frame ke canvas.
+ * @param canvas  target canvas
+ * @param themeId tema yang dipilih
+ * @param gridId  grid yang dipilih
+ * @param photos  array data-URL foto user (kosong = tampilkan placeholder)
+ */
+
+function renderFrame(
+  canvas: HTMLCanvasElement,
+  themeId: string,
+  gridId: string,
+  photos: string[] = [],
+) {
+  const W = 1080,
+    H = 1920;
+  canvas.width = W;
+  canvas.height = H;
+
+  const ctx = canvas.getContext("2d")!;
+  const t = THEMES[themeId as ThemeKey] ?? THEMES.floral;
+  const g = gridOptions.find((x) => x.id === gridId);
+
+  if (!g) {
+    console.warn("Grid tidak ditemukan:", gridId);
+    return; // WAJIB supaya TypeScript narrow type
+  }
+
+  // Background
+  ctx.fillStyle = t.colors[0] ?? "#000000";
+  ctx.fillRect(0, 0, W, H);
+
+  // Noise texture
+  for (let i = 0; i < 600; i++) {
+    ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.045})`;
+    ctx.beginPath();
+    ctx.arc(
+      Math.random() * W,
+      Math.random() * H,
+      Math.random() * 2.5 + 0.5,
+      0,
+      Math.PI * 2,
+    );
+    ctx.fill();
+  }
+
+  // Motif
+  ctx.save();
+  if (themeId === "floral") drawFloralMotif(ctx, W, H, t);
+  if (themeId === "botanical") drawBotanicalMotif(ctx, W, H, t);
+  if (themeId === "gold") drawGoldMotif(ctx, W, H, t);
+  if (themeId === "kawaii") drawKawaiiMotif(ctx, W, H, t);
+  ctx.restore();
+
+  // Photo slot layout
+  const PAD = 55,
+    BORD = 85,
+    GAP = 18,
+    HEAD = 130,
+    FOOT = 130;
+  const aX = PAD + BORD,
+    aY = PAD + BORD + HEAD;
+  const aW = W - 2 * (PAD + BORD),
+    aH = H - 2 * (PAD + BORD) - HEAD - FOOT;
+  const cW = (aW - (g.cols - 1) * GAP) / g.cols;
+  const cH = (aH - (g.rows - 1) * GAP) / g.rows;
+
+  for (let r = 0; r < g.rows; r++) {
+    for (let c = 0; c < g.cols; c++) {
+      const x = aX + c * (cW + GAP),
+        y = aY + r * (cH + GAP);
+
+      // Shadow + card
+      ctx.shadowColor = "rgba(0,0,0,0.13)";
+      ctx.shadowBlur = 24;
+      ctx.shadowOffsetY = 8;
+      ctx.fillStyle = "rgba(255,255,255,0.96)";
+      rrect(ctx, x, y, cW, cH, 22);
+      ctx.fill();
+      ctx.shadowColor = "transparent";
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetY = 0;
+      // Photo or placeholder
+      const photoIdx = r * g.cols + c;
+
+      // Pastikan selalu string
+      const baseColor: string = t.colors[0] ?? "#000000";
+
+      // Cek dengan boolean conversion agar jelas
+      const hasPhoto = Boolean(photos[photoIdx]);
+
+      ctx.fillStyle = hasPhoto
+        ? `${baseColor}00` // transparan kalau ada foto
+        : `${baseColor}aa`; // placeholder kalau kosong
+
+      rrect(ctx, x + 14, y + 14, cW - 28, cH - 28, 14);
+      ctx.fill();
+
+      // Dashed inner border
+      ctx.strokeStyle = t.accent + "55";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([10, 7]);
+      rrect(ctx, x + 14, y + 14, cW - 28, cH - 28, 14);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Camera icon placeholder (hanya saat tidak ada foto)
+      if (!photos[photoIdx]) {
+        const cx2 = x + cW / 2,
+          cy2 = y + cH / 2,
+          cs = Math.min(cW, cH) * 0.13;
+        ctx.fillStyle = t.dark + "35";
+        rrect(
+          ctx,
+          cx2 - cs * 1.6,
+          cy2 - cs * 1.0,
+          cs * 3.2,
+          cs * 2.2,
+          cs * 0.3,
+        );
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(cx2, cy2 + cs * 0.05, cs * 0.7, 0, Math.PI * 2);
+        ctx.fill();
+        rrect(
+          ctx,
+          cx2 - cs * 0.6,
+          cy2 - cs * 1.0,
+          cs * 1.2,
+          cs * 0.4,
+          cs * 0.1,
+        );
+        ctx.fill();
+      }
+
+      // Outer glow border
+      ctx.strokeStyle = t.accent + "44";
+      ctx.lineWidth = 2.5;
+      rrect(ctx, x + 5, y + 5, cW - 10, cH - 10, 24);
+      ctx.stroke();
+    }
+  }
+
+  // Watermark
+  ctx.fillStyle = t.dark + "90";
+  ctx.font = `600 32px Georgia, serif`;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("EasyPoth", W / 2, H - PAD - BORD * 0.5);
+  ctx.strokeStyle = t.accent + "88";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(W / 2 - 90, H - PAD - BORD * 0.5 + 22);
+  ctx.lineTo(W / 2 + 90, H - PAD - BORD * 0.5 + 22);
+  ctx.stroke();
+  [-100, 100].forEach((dx) => {
+    ctx.fillStyle = t.accent;
+    ctx.beginPath();
+    ctx.arc(W / 2 + dx, H - PAD - BORD * 0.5 + 22, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+// ─── Mini preview renderer ─────────────────────────────────────────────────────
+
+function renderMiniPreviews() {
+  nextTick(() => {
+    gridOptions.forEach((grid) => {
+      const canvas = miniCanvasMap.value[grid.id];
+      if (!canvas) return;
+      // Render pada ukuran kecil (200×267) untuk performa
+      const W = 200,
+        H = 267;
+      const offscreen = document.createElement("canvas");
+      renderFrame(offscreen, selectedTheme.value, grid.id, []);
+      canvas.width = W;
+      canvas.height = H;
+      const ctx = canvas.getContext("2d")!;
+      ctx.drawImage(offscreen, 0, 0, W, H);
+    });
+  });
+}
+
+// Re-render mini previews saat tema berubah
+watch(selectedTheme, renderMiniPreviews);
+watch(miniCanvasMap, renderMiniPreviews, { deep: true });
+
+// ─── frameLayouts — dibangun secara dinamis ────────────────────────────────────
+
+function getFrameLayout(gridId: string) {
+  const W = 1080,
+    H = 1920;
+  const PAD = 55,
+    BORD = 85,
+    GAP = 18,
+    HEAD = 130,
+    FOOT = 130;
+  const g = gridOptions.find((x) => x.id === gridId)!;
+  const aX = PAD + BORD,
+    aY = PAD + BORD + HEAD;
+  const aW = W - 2 * (PAD + BORD),
+    aH = H - 2 * (PAD + BORD) - HEAD - FOOT;
+  const cW = (aW - (g.cols - 1) * GAP) / g.cols;
+  const cH = (aH - (g.rows - 1) * GAP) / g.rows;
+
+  const positions: { x: number; y: number; w: number; h: number }[] = [];
+  for (let r = 0; r < g.rows; r++) {
+    for (let c = 0; c < g.cols; c++) {
+      positions.push({
+        x: aX + c * (cW + GAP) + 14,
+        y: aY + r * (cH + GAP) + 14,
+        w: cW - 28,
+        h: cH - 28,
+      });
+    }
+  }
+  return { width: W, height: H, positions };
+}
 
 // ─── Modal helpers ─────────────────────────────────────────────────────────────
 function openFrameModal() {
   frameModalRef.value?.showModal();
+  // render previews setelah modal terbuka
+  setTimeout(renderMiniPreviews, 80);
 }
 
 // ─── Camera ────────────────────────────────────────────────────────────────────
 async function startCamera() {
   if (!activeGrid.value) return;
   capturedPhotos.value = [];
-
   try {
-    stream = await navigator.mediaDevices.getUserMedia({
+    const stream = await navigator.mediaDevices.getUserMedia({
       video: {
         facingMode: isFrontCamera.value ? "user" : "environment",
         aspectRatio: 3 / 4,
       },
       audio: false,
     });
-
+    (frameModalRef.value as any)._stream = stream;
     frameModalRef.value?.close();
     cameraModalRef.value?.showModal();
-
     await new Promise((r) => setTimeout(r, 100));
     if (videoEl.value) videoEl.value.srcObject = stream;
   } catch (e) {
@@ -553,35 +1260,41 @@ async function startCamera() {
 }
 
 function stopCamera() {
+  const stream = (frameModalRef.value as any)?._stream as
+    | MediaStream
+    | undefined;
   stream?.getTracks().forEach((t) => t.stop());
-  stream = null;
+  if (videoEl.value?.srcObject) {
+    (videoEl.value.srcObject as MediaStream)
+      .getTracks()
+      .forEach((t) => t.stop());
+    videoEl.value.srcObject = null;
+  }
   cameraModalRef.value?.close();
   frameModalRef.value?.showModal();
+  setTimeout(renderMiniPreviews, 80);
 }
 
 async function flipCamera() {
   isFrontCamera.value = !isFrontCamera.value;
-  if (stream) {
-    stream.getTracks().forEach((t) => t.stop());
-    stream = await navigator.mediaDevices.getUserMedia({
+  if (videoEl.value?.srcObject) {
+    const oldStream = videoEl.value.srcObject as MediaStream;
+    oldStream.getTracks().forEach((t) => t.stop());
+    const newStream = await navigator.mediaDevices.getUserMedia({
       video: {
         facingMode: isFrontCamera.value ? "user" : "environment",
         aspectRatio: 3 / 4,
       },
       audio: false,
     });
-    if (videoEl.value) videoEl.value.srcObject = stream;
+    videoEl.value.srcObject = newStream;
   }
 }
 
 function toggleTimer() {
   const options = [0, 3, 10];
   const idx = options.indexOf(timerSeconds.value);
-  const next = options[(idx + 1) % options.length];
-
-  if (next !== undefined) {
-    timerSeconds.value = next;
-  }
+  timerSeconds.value = options[(idx + 1) % options.length] ?? 0;
 }
 
 async function takePhoto() {
@@ -604,7 +1317,6 @@ async function takePhoto() {
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   const ctx = canvas.getContext("2d")!;
-
   if (isFrontCamera.value) {
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
@@ -616,63 +1328,100 @@ async function takePhoto() {
 
   if (capturedPhotos.value.length >= activeGrid.value.cells) {
     await new Promise((r) => setTimeout(r, 400));
-    stream?.getTracks().forEach((t) => t.stop());
-    stream = null;
+    (videoEl.value?.srcObject as MediaStream)
+      ?.getTracks()
+      .forEach((t) => t.stop());
+    if (videoEl.value) videoEl.value.srcObject = null;
     cameraModalRef.value?.close();
     previewModalRef.value?.showModal();
   }
 }
 
 // ─── Download ──────────────────────────────────────────────────────────────────
+function drawCover(
+  ctx: CanvasRenderingContext2D,
+  img: HTMLImageElement,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+) {
+  const ratio = Math.max(w / img.width, h / img.height);
+  const nw = img.width * ratio,
+    nh = img.height * ratio;
+  const dx = x - (nw - w) / 2,
+    dy = y - (nh - h) / 2;
+  ctx.save();
+  ctx.beginPath();
+  ctx.rect(x, y, w, h);
+  ctx.clip();
+  ctx.drawImage(img, dx, dy, nw, nh);
+  ctx.restore();
+}
+
 async function downloadResult() {
   if (!canvasEl.value || !activeGrid.value) return;
-  const grid = activeGrid.value;
 
-  const CELL_W = 400;
-  const CELL_H = Math.round(CELL_W * (4 / 3));
-  const GAP = 8;
-  const PAD = 16;
-
-  const canvasW = PAD * 2 + grid.cols * CELL_W + (grid.cols - 1) * GAP;
-  const canvasH = PAD * 2 + grid.rows * CELL_H + (grid.rows - 1) * GAP;
-
+  const layout = getFrameLayout(activeGrid.value.id);
   const canvas = canvasEl.value;
-  canvas.width = canvasW;
-  canvas.height = canvasH;
+  canvas.width = layout.width;
+  canvas.height = layout.height;
   const ctx = canvas.getContext("2d")!;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = "#F3F4F6";
-  ctx.beginPath();
-  ctx.roundRect(0, 0, canvasW, canvasH, 16);
-  ctx.fill();
+  // 1. Render frame motif (tanpa foto dulu)
+  renderFrame(canvas, selectedTheme.value, activeGrid.value.id, []);
 
+  // 2. Gambar foto user di atas frame
   for (let i = 0; i < capturedPhotos.value.length; i++) {
     const photo = capturedPhotos.value[i];
-    if (!photo) continue;
+    if (!photo) continue; // 🔥 penting
 
-    const col = i % grid.cols;
-    const row = Math.floor(i / grid.cols);
-    const x = PAD + col * (CELL_W + GAP);
-    const y = PAD + row * (CELL_H + GAP);
+    const pos = layout.positions[i];
+    if (!pos) continue;
 
     await new Promise<void>((resolve) => {
       const img = new Image();
       img.onload = () => {
-        ctx.save();
-        ctx.beginPath();
-        ctx.roundRect(x, y, CELL_W, CELL_H, 10);
-        ctx.clip();
-        ctx.drawImage(img, x, y, CELL_W, CELL_H);
-        ctx.restore();
+        drawCover(ctx, img, pos.x, pos.y, pos.w, pos.h);
         resolve();
       };
-      img.src = photo;
+
+      img.src = photo; // ✅ sekarang pasti string
     });
   }
 
+  // 3. Re-render motif overlay (agar motif di atas foto)
+  // Kita perlu re-draw hanya layer motif, bukan slot
+  // Solusi: composite dengan offscreen yang hanya motif
+  const motifCanvas = document.createElement("canvas");
+  motifCanvas.width = layout.width;
+  motifCanvas.height = layout.height;
+  const mctx = motifCanvas.getContext("2d")!;
+  const t = THEMES[selectedTheme.value as ThemeKey] ?? THEMES.floral;
+  if (selectedTheme.value === "floral")
+    drawFloralMotif(mctx, layout.width, layout.height, t);
+  if (selectedTheme.value === "botanical")
+    drawBotanicalMotif(mctx, layout.width, layout.height, t);
+  if (selectedTheme.value === "gold")
+    drawGoldMotif(mctx, layout.width, layout.height, t);
+  if (selectedTheme.value === "kawaii")
+    drawKawaiiMotif(mctx, layout.width, layout.height, t);
+  ctx.drawImage(motifCanvas, 0, 0);
+
+  // 4. Re-draw watermark di atas segalanya
+  const PAD = 55,
+    BORD = 85;
+  ctx.fillStyle = t.dark + "90";
+  ctx.font = "600 32px Georgia,serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText("EasyPoth", layout.width / 2, layout.height - PAD - BORD * 0.5);
+
+  // 5. Download
   const link = document.createElement("a");
-  link.download = `easypoth-${grid.id}-${Date.now()}.jpg`;
-  link.href = canvas.toDataURL("image/jpeg", 0.95);
+  link.download = `easypoth-${selectedTheme.value}-${activeGrid.value.id}-${Date.now()}.png`;
+  link.href = canvas.toDataURL("image/png");
   link.click();
 }
 
