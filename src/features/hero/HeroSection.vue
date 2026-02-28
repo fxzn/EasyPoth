@@ -1,5 +1,3 @@
-<script></script>
-
 <template>
   <div class="pt-4 px- md:px- xl:px-0">
     <div class="flex flex-col xl:hidden mx-auto xl:max-w-none">
@@ -11,18 +9,26 @@
 
       <div class="flex gap-8 md:gap-16 mb-8 md:mb-10">
         <div v-for="item in stats" :key="item.label">
-          <p class="text-2xl md:text-4xl font-semibold text-gray-900 leading-none">
+          <p
+            class="text-2xl md:text-4xl font-semibold text-gray-900 leading-none"
+          >
             {{ item.value }}
           </p>
-          <p class="text-xs md:text-base text-gray-500 mt-2">{{ item.label }}</p>
+          <p class="text-xs md:text-base text-gray-500 mt-2">
+            {{ item.label }}
+          </p>
         </div>
       </div>
 
-      <p class="text-gray-600 text-sm md:text-lg mb-8 md:mb-10 leading-relaxed max-w-2xl">
+      <p
+        class="text-gray-600 text-sm md:text-lg mb-8 md:mb-10 leading-relaxed max-w-2xl"
+      >
         Pilih frame favoritmu, unggah fotomu, dan simpan momen spesial seketika
       </p>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-10 md:mb-14">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-10 md:mb-14"
+      >
         <Button
           class="bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-semibold rounded-full py-4 px-8 text-sm md:text-base transition-all w-full"
           @click="openFrameModal"
@@ -34,8 +40,17 @@
           class="bg-white border border-gray-200 text-gray-800 font-medium rounded-full py-4 px-8 text-sm md:text-base flex items-center justify-center gap-2 hover:bg-gray-50 transition-all w-full"
         >
           Gabung sebagai contributor
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="md:w-5 md:h-5">
-            <path d="M10.7809 7.33327L7.2049 3.75726L8.1477 2.81445L13.3332 7.99993L8.1477 13.1853L7.2049 12.2425L10.7809 8.6666H2.6665V7.33327H10.7809Z" fill="currentColor"/>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            class="md:w-5 md:h-5"
+          >
+            <path
+              d="M10.7809 7.33327L7.2049 3.75726L8.1477 2.81445L13.3332 7.99993L8.1477 13.1853L7.2049 12.2425L10.7809 8.6666H2.6665V7.33327H10.7809Z"
+              fill="currentColor"
+            />
           </svg>
         </Button>
       </div>
@@ -51,7 +66,9 @@
       </div>
 
       <div class="flex justify-center mt-auto">
-        <div class="overflow-hidden shadow-2xl w-[92%] md:w-[80%] max-w-[600px] aspect-[9/16] md:aspect-[3/4] max-h-[500px] md:max-h-[700px] rounded-t-[40px] md:rounded-t-[52px] border-x border-t border-gray-100">
+        <div
+          class="overflow-hidden shadow-2xl w-[92%] md:w-[80%] max-w-[600px] aspect-[9/16] md:aspect-[3/4] max-h-[500px] md:max-h-[700px] rounded-t-[40px] md:rounded-t-[52px] border-x border-t border-gray-100"
+        >
           <img
             :src="heroImage"
             alt="Contoh hasil photobooth online dengan berbagai pilihan grid frame estetik"
@@ -61,7 +78,9 @@
       </div>
     </div>
 
-    <div class="hidden xl:grid grid-cols-[1fr_320px_1fr] gap-12 items-start"></div>
+    <div
+      class="hidden xl:grid grid-cols-[1fr_320px_1fr] gap-12 items-start"
+    ></div>
   </div>
 
   <div class="hidden xl:grid grid-cols-[1fr_320px_1fr] gap-12 items-start">
@@ -79,19 +98,28 @@
 
     <div class="flex justify-center">
       <div class="w-[360px] h-[620px] overflow-hidden rounded-t-3xl">
-        <img :src="heroImage" alt="Koleksi frame foto photobooth EasyPoth" class="w-full h-full object-cover object-top"/>
+        <img
+          :src="heroImage"
+          alt="Koleksi frame foto photobooth EasyPoth"
+          class="w-full h-full object-cover object-top"
+        />
       </div>
     </div>
 
     <div>
       <div class="grid grid-cols-2 gap-4">
-        <div v-for="grid in ['1x1 Grid', '2x1 Grid', '3x1 Grid', '3x2 Grid']" :key="grid" class="h-[194px] rounded-2xl bg-gray-200 p-4">
+        <div
+          v-for="grid in ['1x1 Grid', '2x1 Grid', '3x1 Grid', '3x2 Grid']"
+          :key="grid"
+          class="h-[194px] rounded-2xl bg-gray-200 p-4"
+        >
           {{ grid }}
         </div>
       </div>
       <div class="mt-16">
         <p class="font-medium text-gray-600">
-          Pilih frame favoritmu, unggah fotomu, dan simpan momen spesial seketika
+          Pilih frame favoritmu, unggah fotomu, dan simpan momen spesial
+          seketika
         </p>
         <div class="flex items-center gap-4 mt-4">
           <Button
@@ -105,7 +133,10 @@
           <Button class="font-medium" size="md">
             Gabung sebagai contributor
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M10.7809 7.33327L7.2049 3.75726L8.1477 2.81445L13.3332 7.99993L8.1477 13.1853L7.2049 12.2425L10.7809 8.6666H2.6665V7.33327H10.7809Z" fill="black"/>
+              <path
+                d="M10.7809 7.33327L7.2049 3.75726L8.1477 2.81445L13.3332 7.99993L8.1477 13.1853L7.2049 12.2425L10.7809 8.6666H2.6665V7.33327H10.7809Z"
+                fill="black"
+              />
             </svg>
           </Button>
         </div>
@@ -143,7 +174,11 @@
                 grid.rowsClass,
               ]"
             >
-              <div v-for="i in grid.cells" :key="i" class="bg-gray-100 rounded-md"></div>
+              <div
+                v-for="i in grid.cells"
+                :key="i"
+                class="bg-gray-100 rounded-md"
+              ></div>
             </div>
           </div>
         </div>
@@ -170,21 +205,42 @@
         </button>
       </div>
     </div>
-    <div class="modal-backdrop bg-black/50 backdrop-blur-sm" @click="frameModalRef?.close()"></div>
+    <div
+      class="modal-backdrop bg-black/50 backdrop-blur-sm"
+      @click="frameModalRef?.close()"
+    ></div>
   </dialog>
 
   <!-- ─── MODAL 2: Kamera ──────────────────────────────────────────────── -->
   <dialog ref="cameraModalRef" class="modal modal-middle">
-    <div class="modal-box max-w-md p-0 rounded-[20px] bg-[#0F0F13] overflow-hidden shadow-2xl">
+    <div
+      class="modal-box max-w-md p-0 rounded-[20px] bg-[#0F0F13] overflow-hidden shadow-2xl"
+    >
       <!-- Header -->
       <div class="flex items-center justify-between px-5 py-4">
-        <button @click="stopCamera" class="text-gray-400 hover:text-white transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        <button
+          @click="stopCamera"
+          class="text-gray-400 hover:text-white transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-6 h-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
         </button>
         <div class="text-center">
-          <p class="text-white font-semibold text-sm">{{ activeGrid?.label }}</p>
+          <p class="text-white font-semibold text-sm">
+            {{ activeGrid?.label }}
+          </p>
           <p class="text-gray-400 text-xs mt-0.5">
             Foto {{ capturedPhotos.length + 1 }} dari {{ activeGrid?.cells }}
           </p>
@@ -195,12 +251,15 @@
       <!-- Progress dots -->
       <div class="flex justify-center gap-2 pb-3">
         <div
-          v-for="i in (activeGrid?.cells ?? 0)"
+          v-for="i in activeGrid?.cells ?? 0"
           :key="i"
           :class="[
             'rounded-full transition-all duration-300',
-            i <= capturedPhotos.length ? 'bg-[#7C3AED] w-4 h-2' :
-            i === capturedPhotos.length + 1 ? 'bg-white w-4 h-2' : 'bg-gray-600 w-2 h-2',
+            i <= capturedPhotos.length
+              ? 'bg-[#7C3AED] w-4 h-2'
+              : i === capturedPhotos.length + 1
+                ? 'bg-white w-4 h-2'
+                : 'bg-gray-600 w-2 h-2',
           ]"
         ></div>
       </div>
@@ -219,9 +278,17 @@
         <!-- Captured thumbnails overlay -->
         <div
           v-if="activeGrid && capturedPhotos.length > 0"
-          :class="['absolute inset-0 grid gap-0.5', activeGrid.colsClass, activeGrid.rowsClass]"
+          :class="[
+            'absolute inset-0 grid gap-0.5',
+            activeGrid.colsClass,
+            activeGrid.rowsClass,
+          ]"
         >
-          <div v-for="i in (activeGrid?.cells ?? 0)" :key="i" class="relative overflow-hidden">
+          <div
+            v-for="i in activeGrid?.cells ?? 0"
+            :key="i"
+            class="relative overflow-hidden"
+          >
             <img
               v-if="capturedPhotos[i - 1]"
               :src="capturedPhotos[i - 1]"
@@ -236,14 +303,22 @@
 
         <!-- Countdown -->
         <Transition name="countdown">
-          <div v-if="countdown > 0" class="absolute inset-0 flex items-center justify-center bg-black/40">
-            <span class="text-white text-8xl font-bold tabular-nums">{{ countdown }}</span>
+          <div
+            v-if="countdown > 0"
+            class="absolute inset-0 flex items-center justify-center bg-black/40"
+          >
+            <span class="text-white text-8xl font-bold tabular-nums">{{
+              countdown
+            }}</span>
           </div>
         </Transition>
 
         <!-- Flash -->
         <Transition name="flash">
-          <div v-if="showFlash" class="absolute inset-0 bg-white pointer-events-none"></div>
+          <div
+            v-if="showFlash"
+            class="absolute inset-0 bg-white pointer-events-none"
+          ></div>
         </Transition>
       </div>
 
@@ -253,8 +328,19 @@
           @click="flipCamera"
           class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+            />
           </svg>
         </button>
 
@@ -270,8 +356,19 @@
           @click="toggleTimer"
           class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors relative"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           <span
             v-if="timerSeconds > 0"
@@ -287,18 +384,30 @@
   <!-- ─── MODAL 3: Preview Hasil ───────────────────────────────────────── -->
   <dialog ref="previewModalRef" class="modal modal-middle">
     <div class="modal-box max-w-md p-5 rounded-[20px] bg-white shadow-2xl">
-      <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">Preview Hasil</h3>
+      <h3 class="text-xl font-semibold text-gray-900 mb-4 text-center">
+        Preview Hasil
+      </h3>
 
       <canvas ref="canvasEl" class="hidden"></canvas>
 
-      <div class="rounded-2xl overflow-hidden bg-gray-50 border border-gray-100 p-3">
+      <div
+        class="rounded-2xl overflow-hidden bg-gray-50 border border-gray-100 p-3"
+      >
         <div
           v-if="activeGrid"
-          :class="['grid gap-1.5 w-full', activeGrid.colsClass, activeGrid.rowsClass]"
+          :class="[
+            'grid gap-1.5 w-full',
+            activeGrid.colsClass,
+            activeGrid.rowsClass,
+          ]"
           style="aspect-ratio: 3/4"
         >
-          <div v-for="(photo, i) in capturedPhotos" :key="i" class="rounded-lg overflow-hidden bg-gray-200">
-            <img :src="photo" class="w-full h-full object-cover"/>
+          <div
+            v-for="(photo, i) in capturedPhotos"
+            :key="i"
+            class="rounded-lg overflow-hidden bg-gray-200"
+          >
+            <img :src="photo" class="w-full h-full object-cover" />
           </div>
         </div>
       </div>
@@ -341,10 +450,42 @@ const stats = [
 
 // ─── Grid Options ──────────────────────────────────────────────────────────────
 const gridOptions = [
-  { id: "1x1 Grid", label: "1×1 Grid", cells: 1, colsClass: "grid-cols-1", rowsClass: "grid-rows-1", cols: 1, rows: 1 },
-  { id: "2x2 Grid", label: "2×2 Grid", cells: 4, colsClass: "grid-cols-2", rowsClass: "grid-rows-2", cols: 2, rows: 2 },
-  { id: "3x1 Grid", label: "3×1 Grid", cells: 3, colsClass: "grid-cols-1", rowsClass: "grid-rows-3", cols: 1, rows: 3 },
-  { id: "3x2 Grid", label: "3×2 Grid", cells: 6, colsClass: "grid-cols-2", rowsClass: "grid-rows-3", cols: 2, rows: 3 },
+  {
+    id: "1x1 Grid",
+    label: "1×1 Grid",
+    cells: 1,
+    colsClass: "grid-cols-1",
+    rowsClass: "grid-rows-1",
+    cols: 1,
+    rows: 1,
+  },
+  {
+    id: "2x2 Grid",
+    label: "2×2 Grid",
+    cells: 4,
+    colsClass: "grid-cols-2",
+    rowsClass: "grid-rows-2",
+    cols: 2,
+    rows: 2,
+  },
+  {
+    id: "3x1 Grid",
+    label: "3×1 Grid",
+    cells: 3,
+    colsClass: "grid-cols-1",
+    rowsClass: "grid-rows-3",
+    cols: 1,
+    rows: 3,
+  },
+  {
+    id: "3x2 Grid",
+    label: "3×2 Grid",
+    cells: 6,
+    colsClass: "grid-cols-2",
+    rowsClass: "grid-rows-3",
+    cols: 2,
+    rows: 3,
+  },
 ];
 
 // ─── State ─────────────────────────────────────────────────────────────────────
@@ -356,7 +497,9 @@ const countdown = ref(0);
 const showFlash = ref(false);
 const timerSeconds = ref(3);
 
-const activeGrid = computed(() => gridOptions.find((g) => g.id === selectedGrid.value) ?? null);
+const activeGrid = computed(
+  () => gridOptions.find((g) => g.id === selectedGrid.value)!,
+);
 
 // ─── Refs ──────────────────────────────────────────────────────────────────────
 const frameModalRef = ref<HTMLDialogElement | null>(null);
@@ -367,15 +510,15 @@ const canvasEl = ref<HTMLCanvasElement | null>(null);
 let stream: MediaStream | null = null;
 
 // ─── Grid helper (kept for backward compat if used elsewhere) ──────────────────
-function gridConfig(grid: string) {
-  const config: Record<string, { cols: string; rows: string; count: number }> = {
-    "1x1 Grid": { cols: "grid-cols-1", rows: "grid-rows-1", count: 1 },
-    "2x2 Grid": { cols: "grid-cols-2", rows: "grid-rows-2", count: 4 },
-    "3x1 Grid": { cols: "grid-cols-1", rows: "grid-rows-3", count: 3 },
-    "3x2 Grid": { cols: "grid-cols-2", rows: "grid-rows-3", count: 6 },
-  };
-  return config[grid] ?? { cols: "grid-cols-1", rows: "grid-rows-1", count: 1 };
-}
+// function gridConfig(grid: string) {
+//   const config: Record<string, { cols: string; rows: string; count: number }> = {
+//     "1x1 Grid": { cols: "grid-cols-1", rows: "grid-rows-1", count: 1 },
+//     "2x2 Grid": { cols: "grid-cols-2", rows: "grid-rows-2", count: 4 },
+//     "3x1 Grid": { cols: "grid-cols-1", rows: "grid-rows-3", count: 3 },
+//     "3x2 Grid": { cols: "grid-cols-2", rows: "grid-rows-3", count: 6 },
+//   };
+//   return config[grid] ?? { cols: "grid-cols-1", rows: "grid-rows-1", count: 1 };
+// }
 
 // ─── Modal helpers ─────────────────────────────────────────────────────────────
 function openFrameModal() {
@@ -389,7 +532,10 @@ async function startCamera() {
 
   try {
     stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: isFrontCamera.value ? "user" : "environment", aspectRatio: 3 / 4 },
+      video: {
+        facingMode: isFrontCamera.value ? "user" : "environment",
+        aspectRatio: 3 / 4,
+      },
       audio: false,
     });
 
@@ -399,7 +545,9 @@ async function startCamera() {
     await new Promise((r) => setTimeout(r, 100));
     if (videoEl.value) videoEl.value.srcObject = stream;
   } catch (e) {
-    alert("Tidak dapat mengakses kamera. Pastikan izin kamera telah diberikan.");
+    alert(
+      "Tidak dapat mengakses kamera. Pastikan izin kamera telah diberikan.",
+    );
     console.error(e);
   }
 }
@@ -416,7 +564,10 @@ async function flipCamera() {
   if (stream) {
     stream.getTracks().forEach((t) => t.stop());
     stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: isFrontCamera.value ? "user" : "environment", aspectRatio: 3 / 4 },
+      video: {
+        facingMode: isFrontCamera.value ? "user" : "environment",
+        aspectRatio: 3 / 4,
+      },
       audio: false,
     });
     if (videoEl.value) videoEl.value.srcObject = stream;
