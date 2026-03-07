@@ -301,6 +301,7 @@ type TemplatePreviewPreset = {
 type SelectedTemplateMeta = {
   url: string;
   priceLabel: string;
+  sourcePath: string | null;
 };
 
 const selectedGrid = ref("3x2 Grid");
@@ -361,10 +362,13 @@ const templatePreviewPresets: TemplatePreviewPreset[] = [
 ];
 
 function getTemplatePreviewPreset() {
-  if (!activeFrameUrl.value) return null;
+  const sourcePath = currentTemplateMeta.value?.sourcePath ?? "";
+  if (!activeFrameUrl.value && !sourcePath) return null;
   return (
-    templatePreviewPresets.find((preset) =>
-      activeFrameUrl.value?.includes(preset.match),
+    templatePreviewPresets.find(
+      (preset) =>
+        (sourcePath && sourcePath.includes(preset.match)) ||
+        (!!activeFrameUrl.value && activeFrameUrl.value.includes(preset.match)),
     ) ?? null
   );
 }
@@ -591,11 +595,13 @@ function closePreviewFrameModal() {
 function applyPreviewFrameSelection(payload: {
   templateUrl: string | null;
   priceLabel: string;
+  sourcePath: string | null;
 }) {
   if (payload.templateUrl) {
     selectedTemplateMetaByGrid.value[selectedGrid.value] = {
       url: payload.templateUrl,
       priceLabel: payload.priceLabel,
+      sourcePath: payload.sourcePath,
     };
   }
   isPreviewFrameModalOpen.value = false;

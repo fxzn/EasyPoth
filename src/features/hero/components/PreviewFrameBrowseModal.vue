@@ -28,7 +28,7 @@
             v-for="item in pagedCards"
             :key="item.key"
             class="text-left group"
-            @click="selectTemplate(item.templateUrl ?? null, item.price)"
+            @click="selectTemplate(item.templateUrl ?? null, item.price, item.sourcePath ?? null)"
           >
             <div class="mb-1.5">
               <p class="text-xs text-gray-500 flex items-center gap-1.5">
@@ -123,7 +123,10 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (e: "close"): void;
-  (e: "apply", payload: { templateUrl: string | null; priceLabel: string }): void;
+  (
+    e: "apply",
+    payload: { templateUrl: string | null; priceLabel: string; sourcePath: string | null },
+  ): void;
 }>();
 
 const dialogRef = ref<HTMLDialogElement | null>(null);
@@ -175,6 +178,7 @@ const cards = computed(() => {
       price: getPriceLabel(path),
       thumbnail,
       templateUrl: thumbnail,
+      sourcePath: path,
     }));
 
   if (templates.length > 0) return templates;
@@ -182,7 +186,7 @@ const cards = computed(() => {
   if (props.selectedGrid === "3x2 Grid") {
     const fallbackPath = Object.keys(templateAssets).find((path) => path.endsWith("/3x2-frame.png"));
     if (fallbackPath) {
-      return [
+          return [
         {
           key: `${props.selectedGrid}-fallback`,
           author: "EasyPoth",
@@ -190,6 +194,7 @@ const cards = computed(() => {
           price: "Gratis",
           thumbnail: templateAssets[fallbackPath],
           templateUrl: templateAssets[fallbackPath],
+          sourcePath: fallbackPath,
         },
       ];
     }
@@ -217,9 +222,9 @@ const pagedCards = computed(() => {
   return filteredCards.value.slice(start, start + cardsPerPage);
 });
 
-function selectTemplate(templateUrl: string | null, priceLabel: string) {
+function selectTemplate(templateUrl: string | null, priceLabel: string, sourcePath: string | null) {
   localSelectedTemplateUrl.value = templateUrl;
-  emit("apply", { templateUrl, priceLabel });
+  emit("apply", { templateUrl, priceLabel, sourcePath });
 }
 
 function goPrevPage() {
