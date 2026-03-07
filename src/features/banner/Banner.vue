@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import EasypothLogo from './component/EasypothLogo.vue';
-import MarqueeItem from './component/MarqueeItem.vue';
-import StarIcon from './component/StarIcon.vue';
+import EasypothLogo from './components/EasypothLogo.vue';
+import MarqueeItem from './components/MarqueeItem.vue';
+import StarIcon from './components/StarIcon.vue';
 
 </script>
 

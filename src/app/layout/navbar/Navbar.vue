@@ -205,8 +205,24 @@ const onSubmit = (e: MouseEvent) => {
 
       <!-- Mobile Navbar -->
       <!-- Mobile Navbar -->
-      <div class="lg:hidden">
-        <div class="flex items-center justify-between">
+      <div class="lg:hidden relative">
+        <Transition
+          enter-active-class="transition-opacity duration-200 ease-out"
+          enter-from-class="opacity-0"
+          enter-to-class="opacity-100"
+          leave-active-class="transition-opacity duration-150 ease-in"
+          leave-from-class="opacity-100"
+          leave-to-class="opacity-0"
+        >
+          <button
+            v-if="isMenuOpen"
+            class="fixed inset-0 z-40 bg-black/35 backdrop-blur-[1px]"
+            aria-label="Close menu backdrop"
+            @click="isMenuOpen = false"
+          ></button>
+        </Transition>
+
+        <div class="flex items-center justify-between relative z-20">
           <!-- Left: Logo -->
           <div class="flex items-center">
             <svg
@@ -274,7 +290,7 @@ const onSubmit = (e: MouseEvent) => {
           </div>
         </div>
 
-        <!-- Mobile Menu Dropdown -->
+        <!-- Mobile Menu Overlay -->
         <Transition
           enter-active-class="transition duration-200 ease-out"
           enter-from-class="opacity-0 -translate-y-2"
@@ -283,55 +299,53 @@ const onSubmit = (e: MouseEvent) => {
           leave-from-class="opacity-100 translate-y-0"
           leave-to-class="opacity-0 -translate-y-2"
         >
-          <div
-            v-if="isMenuOpen"
-            class="mt-6 bg-white rounded-lg shadow-lg border border-gray-200 p-6"
-          >
-            <ul class="flex flex-col gap-4 text-base">
-              <li>
-                <a
-                  href="#"
-                  class="block py-2 hover:text-violet-600 transition-colors"
-                >
-                  Beranda
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="block py-2 hover:text-violet-600 transition-colors"
-                >
-                  Produk
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="block py-2 hover:text-violet-600 transition-colors"
-                >
-                  How it works
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="block py-2 hover:text-violet-600 transition-colors"
-                >
-                  Testimonial
-                </a>
-              </li>
-            </ul>
+          <div v-if="isMenuOpen" class="absolute left-0 right-0 top-full mt-4 z-50">
+            <div class="bg-white rounded-lg shadow-lg border border-gray-200 p-6">
+              <ul class="flex flex-col gap-4 text-base">
+                <li>
+                  <a
+                    href="#"
+                    class="block py-2 hover:text-violet-600 transition-colors"
+                  >
+                    Beranda
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="block py-2 hover:text-violet-600 transition-colors"
+                  >
+                    Produk
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="block py-2 hover:text-violet-600 transition-colors"
+                  >
+                    How it works
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    class="block py-2 hover:text-violet-600 transition-colors"
+                  >
+                    Testimonial
+                  </a>
+                </li>
+              </ul>
 
-            <!-- Button inside menu -->
-            <div class="mt-6 pt-4 border-t border-gray-200">
-              <Button
-                class="w-full bg-violet-600 font-medium text-white hover:bg-violet-700"
-                variant="btn-primary"
-                size="sm"
-                @click="onSubmit"
-              >
-                Gabung sebagai author
-              </Button>
+              <div class="mt-6 pt-4 border-t border-gray-200">
+                <Button
+                  class="w-full bg-violet-600 font-medium text-white hover:bg-violet-700"
+                  variant="btn-primary"
+                  size="sm"
+                  @click="onSubmit"
+                >
+                  Gabung sebagai author
+                </Button>
+              </div>
             </div>
           </div>
         </Transition>
