@@ -27,29 +27,60 @@
   <PreviewFrameBrowseModal
     :is-open="isPreviewFrameModalOpen"
     :selected-grid="selectedGrid"
-    :selected-template-url="selectedTemplateMetaByGrid[selectedGrid]?.url ?? null"
+    :selected-template-url="
+      selectedTemplateMetaByGrid[selectedGrid]?.url ?? null
+    "
     @close="closePreviewFrameModal"
     @apply="applyPreviewFrameSelection"
   />
 
   <dialog ref="cameraModalRef" class="modal modal-middle">
-    <div class="modal-box w-[360px] max-w-[92vw] p-0 rounded-[18px] bg-[#0B0B12] overflow-hidden shadow-2xl">
+    <div
+      class="modal-box w-[360px] max-w-[92vw] p-0 rounded-[18px] bg-[#0B0B12] overflow-hidden shadow-2xl"
+    >
       <div class="relative aspect-[9/16] bg-black">
-        <video ref="videoEl" autoplay playsinline muted class="absolute inset-0 w-full h-full object-cover" :class="{ 'scale-x-[-1]': isFrontCamera }"></video>
+        <video
+          ref="videoEl"
+          autoplay
+          playsinline
+          muted
+          class="absolute inset-0 w-full h-full object-cover"
+          :class="{ 'scale-x-[-1]': isFrontCamera }"
+        ></video>
 
         <div
           v-if="activeGrid && capturedPhotos.length > 0"
-          :class="['absolute inset-0 grid gap-0.5', activeGrid.colsClass, activeGrid.rowsClass]"
+          :class="[
+            'absolute inset-0 grid gap-0.5',
+            activeGrid.colsClass,
+            activeGrid.rowsClass,
+          ]"
         >
-          <div v-for="i in (activeGrid?.cells ?? 0)" :key="i" class="relative overflow-hidden">
-            <img v-if="capturedPhotos[i - 1]" :src="capturedPhotos[i - 1]" class="w-full h-full object-cover opacity-70" />
-            <div v-else-if="i === capturedPhotos.length + 1" class="absolute inset-0 border-2 border-[#7C3AED] animate-pulse bg-[#7C3AED]/10"></div>
+          <div
+            v-for="i in activeGrid?.cells ?? 0"
+            :key="i"
+            class="relative overflow-hidden"
+          >
+            <img
+              v-if="capturedPhotos[i - 1]"
+              :src="capturedPhotos[i - 1]"
+              class="w-full h-full object-cover opacity-70"
+            />
+            <div
+              v-else-if="i === capturedPhotos.length + 1"
+              class="absolute inset-0 border-2 border-[#7C3AED] animate-pulse bg-[#7C3AED]/10"
+            ></div>
           </div>
         </div>
 
-        <div class="absolute top-0 inset-x-0 px-5 pt-4 pb-12 bg-gradient-to-b from-black/70 to-transparent">
+        <div
+          class="absolute top-0 inset-x-0 px-5 pt-4 pb-12 bg-gradient-to-b from-black/70 to-transparent"
+        >
           <div class="flex items-center justify-between text-white">
-            <button @click="stopCamera" class="text-sm font-medium hover:text-white/80 transition-colors">
+            <button
+              @click="stopCamera"
+              class="text-sm font-medium hover:text-white/80 transition-colors"
+            >
               ← Kembali
             </button>
             <p class="text-sm font-medium">{{ activeGrid?.id }}</p>
@@ -62,8 +93,13 @@
           leave-active-class="transition-all duration-200 ease-in"
           leave-to-class="opacity-0 scale-150"
         >
-          <div v-if="countdown > 0" class="absolute inset-0 flex items-center justify-center bg-black/40">
-            <span class="text-white text-8xl font-bold tabular-nums">{{ countdown }}</span>
+          <div
+            v-if="countdown > 0"
+            class="absolute inset-0 flex items-center justify-center bg-black/40"
+          >
+            <span class="text-white text-8xl font-bold tabular-nums">{{
+              countdown
+            }}</span>
           </div>
         </Transition>
 
@@ -73,16 +109,38 @@
           leave-active-class="transition-opacity duration-300 ease-in"
           leave-to-class="opacity-0"
         >
-          <div v-if="showFlash" class="absolute inset-0 bg-white pointer-events-none"></div>
+          <div
+            v-if="showFlash"
+            class="absolute inset-0 bg-white pointer-events-none"
+          ></div>
         </Transition>
 
-        <div class="absolute bottom-0 inset-x-0 px-5 pb-5 pt-14 bg-gradient-to-t from-black/70 to-transparent">
+        <div
+          class="absolute bottom-0 inset-x-0 px-5 pb-5 pt-14 bg-gradient-to-t from-black/70 to-transparent"
+        >
           <div class="flex items-center justify-between">
-            <button @click="toggleTimer" class="w-10 h-10 rounded-full bg-white/25 flex items-center justify-center text-white hover:bg-white/35 transition-colors relative">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 2L4 14h6l-1 8 9-12h-6l1-8z" />
+            <button
+              @click="toggleTimer"
+              class="w-10 h-10 rounded-full bg-white/25 flex items-center justify-center text-white hover:bg-white/35 transition-colors relative"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-4 h-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"
+                />
               </svg>
-              <span v-if="timerSeconds > 0" class="absolute -top-1.5 -right-1.5 bg-[#7C3AED] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+              <span
+                v-if="timerSeconds > 0"
+                class="absolute -top-1.5 -right-1.5 bg-[#7C3AED] text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center"
+              >
                 {{ timerSeconds }}
               </span>
             </button>
@@ -92,7 +150,9 @@
               :disabled="isCapturing"
               class="w-20 h-20 rounded-full bg-white/90 flex items-center justify-center shadow-lg active:scale-95 transition-transform disabled:opacity-50"
             >
-              <div class="w-16 h-16 rounded-full border-[5px] border-gray-300 bg-white"></div>
+              <div
+                class="w-16 h-16 rounded-full border-[5px] border-gray-300 bg-white"
+              ></div>
             </button>
 
             <button
@@ -115,8 +175,12 @@
   />
 
   <dialog ref="previewModalRef" class="modal modal-middle">
-    <div class="modal-box w-[500px] max-w-[92vw] max-h-[90vh] rounded-[18px] p-5 md:p-6 bg-white shadow-2xl overflow-x-hidden overflow-y-auto">
-      <h3 class="mb-4 text-[24px] leading-[1.05] font-medium tracking-[-0.01em] text-[#0B132B]">
+    <div
+      class="modal-box w-[500px] max-w-[92vw] max-h-[90vh] rounded-[18px] p-5 md:p-6 bg-white shadow-2xl overflow-x-hidden overflow-y-auto"
+    >
+      <h3
+        class="mb-4 text-[24px] leading-[1.05] font-medium tracking-[-0.01em] text-[#0B132B]"
+      >
         Lihat hasil foto
       </h3>
 
@@ -135,8 +199,20 @@
               class="absolute"
               :style="getPreviewPhotoAreaStyle(activeGrid.id)"
             >
-              <div :class="['grid w-full h-full', activeGrid.colsClass, activeGrid.rowsClass]" :style="{ gap: getPreviewGap(activeGrid.id) }">
-                <div v-for="(photo, i) in capturedPhotos" :key="i" class="overflow-hidden" :style="{ borderRadius: getPreviewPhotoRadius() }">
+              <div
+                :class="[
+                  'grid w-full h-full',
+                  activeGrid.colsClass,
+                  activeGrid.rowsClass,
+                ]"
+                :style="{ gap: getPreviewGap(activeGrid.id) }"
+              >
+                <div
+                  v-for="(photo, i) in capturedPhotos"
+                  :key="i"
+                  class="overflow-hidden"
+                  :style="{ borderRadius: getPreviewPhotoRadius() }"
+                >
                   <img :src="photo" class="w-full h-full object-cover" />
                 </div>
               </div>
@@ -154,8 +230,19 @@
             @click="retakeAll"
             class="absolute z-20 right-4 bottom-4 h-10 rounded-full bg-white text-[#101828] inline-flex items-center gap-1.5 px-4 text-sm font-semibold hover:bg-gray-100 transition-colors shadow-sm"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-4 h-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+              />
             </svg>
             Ulang
           </button>
@@ -188,7 +275,13 @@ import FrameSelectionModal from "./components/FrameSelectionModal.vue";
 import HeroDesktopLayout from "./components/HeroDesktopLayout.vue";
 import HeroMobileLayout from "./components/HeroMobileLayout.vue";
 import PreviewFrameBrowseModal from "./components/PreviewFrameBrowseModal.vue";
-import { frameSlots, gridOptions, heroGridLabelsDesktop, heroGridLabelsMobile, heroStats } from "./hero.data";
+import {
+  frameSlots,
+  gridOptions,
+  heroGridLabelsDesktop,
+  heroGridLabelsMobile,
+  heroStats,
+} from "./hero.data";
 
 type PreviewOverlayStyle = {
   top: string;
@@ -219,9 +312,13 @@ const showFlash = ref(false);
 const timerSeconds = ref(3);
 const isFrameModalOpen = ref(false);
 const isPreviewFrameModalOpen = ref(false);
-const selectedTemplateMetaByGrid = ref<Record<string, SelectedTemplateMeta>>({});
+const selectedTemplateMetaByGrid = ref<Record<string, SelectedTemplateMeta>>(
+  {},
+);
 
-const activeGrid = computed(() => gridOptions.find((g) => g.id === selectedGrid.value) ?? null);
+const activeGrid = computed(
+  () => gridOptions.find((g) => g.id === selectedGrid.value) ?? null,
+);
 const isTemplateOverlayMode = computed(() => {
   if (!activeGrid.value) return false;
   return Boolean(selectedTemplateMetaByGrid.value[activeGrid.value.id]?.url);
@@ -230,7 +327,9 @@ const currentTemplateMeta = computed(() => {
   if (!activeGrid.value) return null;
   return selectedTemplateMetaByGrid.value[activeGrid.value.id] ?? null;
 });
-const hasSelectedTemplate = computed(() => Boolean(currentTemplateMeta.value?.url));
+const hasSelectedTemplate = computed(() =>
+  Boolean(currentTemplateMeta.value?.url),
+);
 const isCurrentFramePaid = computed(() => {
   const price = currentTemplateMeta.value?.priceLabel ?? "Gratis";
   return !/gratis/i.test(price);
@@ -252,10 +351,10 @@ const templatePreviewPresets: TemplatePreviewPreset[] = [
     aspectRatio: "9 / 16",
     photoRadius: "22px",
     slot: {
-      top: "5.2%",      // was 6.3%
-      left: "9.24%",    // was 9.8%
-      width: "81.42%",  // was 80.4%
-      height: "85.5%",  // was 79.2% ← INI PENYEBAB UTAMA
+      top: "5.2%", // was 6.3%
+      left: "9.24%", // was 9.8%
+      width: "81.42%", // was 80.4%
+      height: "85.5%", // was 79.2% ← INI PENYEBAB UTAMA
       gap: "0",
     },
   },
@@ -263,7 +362,11 @@ const templatePreviewPresets: TemplatePreviewPreset[] = [
 
 function getTemplatePreviewPreset() {
   if (!activeFrameUrl.value) return null;
-  return templatePreviewPresets.find((preset) => activeFrameUrl.value?.includes(preset.match)) ?? null;
+  return (
+    templatePreviewPresets.find((preset) =>
+      activeFrameUrl.value?.includes(preset.match),
+    ) ?? null
+  );
 }
 
 function getFrameUrl(gridId: string): string | null {
@@ -356,7 +459,10 @@ async function startCamera() {
 
   try {
     stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: isFrontCamera.value ? "user" : "environment", aspectRatio: 3 / 4 },
+      video: {
+        facingMode: isFrontCamera.value ? "user" : "environment",
+        aspectRatio: 3 / 4,
+      },
       audio: false,
     });
 
@@ -366,7 +472,9 @@ async function startCamera() {
     await new Promise((r) => setTimeout(r, 100));
     if (videoEl.value) videoEl.value.srcObject = stream;
   } catch (e) {
-    alert("Tidak dapat mengakses kamera. Pastikan izin kamera telah diberikan.");
+    alert(
+      "Tidak dapat mengakses kamera. Pastikan izin kamera telah diberikan.",
+    );
     console.error(e);
   }
 }
@@ -453,7 +561,8 @@ function readFileAsDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(String(reader.result ?? ""));
-    reader.onerror = () => reject(reader.error ?? new Error("Gagal membaca file"));
+    reader.onerror = () =>
+      reject(reader.error ?? new Error("Gagal membaca file"));
     reader.readAsDataURL(file);
   });
 }
@@ -479,7 +588,10 @@ function closePreviewFrameModal() {
   previewModalRef.value?.showModal();
 }
 
-function applyPreviewFrameSelection(payload: { templateUrl: string | null; priceLabel: string }) {
+function applyPreviewFrameSelection(payload: {
+  templateUrl: string | null;
+  priceLabel: string;
+}) {
   if (payload.templateUrl) {
     selectedTemplateMetaByGrid.value[selectedGrid.value] = {
       url: payload.templateUrl,
@@ -497,7 +609,9 @@ function handlePreviewPrimaryAction() {
     return;
   }
   if (isCurrentFramePaid.value) {
-    alert("Lanjut ke pembayaran (sementara belum terhubung ke halaman payment).");
+    alert(
+      "Lanjut ke pembayaran (sementara belum terhubung ke halaman payment).",
+    );
     return;
   }
   void downloadPreviewResult();
@@ -548,14 +662,32 @@ async function downloadPreviewResult() {
       canvas.height = frameImg.naturalHeight;
 
       if (isTemplateOverlayMode.value) {
-        drawCover(ctx, photoImg, 0, 0, canvas.width, canvas.height, photoImg.naturalWidth, photoImg.naturalHeight);
+        drawCover(
+          ctx,
+          photoImg,
+          0,
+          0,
+          canvas.width,
+          canvas.height,
+          photoImg.naturalWidth,
+          photoImg.naturalHeight,
+        );
       } else {
         const slot = getPreviewOverlayStyle(activeGrid.value.id);
         const sx = (parseFloat(slot.left) / 100) * canvas.width;
         const sy = (parseFloat(slot.top) / 100) * canvas.height;
         const sw = (parseFloat(slot.width) / 100) * canvas.width;
         const sh = (parseFloat(slot.height) / 100) * canvas.height;
-        drawCover(ctx, photoImg, sx, sy, sw, sh, photoImg.naturalWidth, photoImg.naturalHeight);
+        drawCover(
+          ctx,
+          photoImg,
+          sx,
+          sy,
+          sw,
+          sh,
+          photoImg.naturalWidth,
+          photoImg.naturalHeight,
+        );
       }
 
       ctx.drawImage(frameImg, 0, 0, canvas.width, canvas.height);
