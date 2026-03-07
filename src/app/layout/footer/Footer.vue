@@ -1,11 +1,11 @@
 <template>
-  <footer class="bg-[#232323] text-white pt-16 pb-8">
+  <footer class="bg-[#232323] text-white pt-16 pb-8 text-center lg:text-left">
     <div class="mx-auto px-6 sm:px-10 lg:px-16">
       <div
-        class="flex flex-col lg:flex-row justify-between mb-12 lg:mb-16 gap-12 lg:gap-0"
+        class="flex flex-col lg:flex-row justify-between mb-12 lg:mb-16 gap-12 lg:gap-0 items-center lg:items-start"
       >
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-16">
-          <div>
+        <div class="grid w-full max-w-[700px] grid-cols-2 sm:grid-cols-3 gap-10 sm:gap-16 justify-items-center lg:justify-items-start">
+          <div class="w-full max-w-[220px]">
             <h3 class="text-xl font-medium mb-6">Links</h3>
             <ul class="space-y-4 text-sm md:text-base">
               <li>
@@ -39,7 +39,7 @@
             </ul>
           </div>
 
-          <div>
+          <div class="w-full max-w-[220px]">
             <h3 class="text-xl font-medium mb-6">Untuk Kreator</h3>
             <ul class="space-y-4 text-sm md:text-base">
               <li>
@@ -73,7 +73,7 @@
             </ul>
           </div>
 
-          <div>
+          <div class="w-full max-w-[220px] col-span-2 sm:col-span-1">
             <h3 class="text-xl font-medium mb-6">Bantuan</h3>
             <ul class="space-y-4 text-sm md:text-base">
               <li>
@@ -96,9 +96,9 @@
         </div>
 
         <div
-          class="flex flex-col items-start lg:items-end lg:text-right border-t lg:border-none border-gray-800 pt-10 lg:pt-0"
+          class="flex flex-col items-center lg:items-end lg:text-right border-t lg:border-none border-gray-800 pt-10 lg:pt-0 w-full"
         >
-          <div class="flex items-center gap-3 mb-8">
+          <div class="flex items-center justify-center lg:justify-end gap-3 mb-8">
             <a
               v-for="social in socialLinks"
               :key="social.name"
@@ -112,7 +112,7 @@
             </a>
           </div>
 
-          <div class="flex gap-8 mb-6 text-gray-300 text-sm md:text-base">
+          <div class="flex flex-wrap justify-center lg:justify-end gap-4 sm:gap-8 mb-6 text-gray-300 text-sm md:text-base">
             <a href="#" class="hover:text-white transition-colors"
               >Syarat & Ketentuan</a
             >
