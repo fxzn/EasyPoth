@@ -704,7 +704,7 @@ async function downloadPreviewResult() {
     }
 
     const link = document.createElement("a");
-    link.download = `easypoth-${activeGrid.value.id.replace(/\s+/g, "-").toLowerCase()}-${Date.now()}.png`;
+    link.download = `easypoth-${activeGrid.value.id.replace(/\s+/g, "-").toLowerCase()}-${Date.now()}.jpg`;
     link.href = canvas.toDataURL("image/png");
     link.click();
   } catch (e) {
