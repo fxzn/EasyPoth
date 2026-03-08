@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import Button from "../../../components/ui/Button.vue";
-import type { HeroStat } from "../hero.data";
+import type { HeroStat } from "../../../lib/types/hero";
 
 defineProps<{
   stats: HeroStat[];

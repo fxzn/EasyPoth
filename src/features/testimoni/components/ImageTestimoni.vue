@@ -13,14 +13,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-
-type Testimonial = {
-  id: number;
-  name: string;
-  role: string;
-  quote: string;
-  image: string;
-};
+import type { Testimonial } from "../../../lib/types/testimoni";
 
 const props = defineProps<{
   currentTestimonial: Testimonial;

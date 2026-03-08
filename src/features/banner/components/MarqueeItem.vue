@@ -26,15 +26,14 @@
 
 <script setup lang="ts">
 import { Motion } from "motion-v";
+import type { MarqueeItemProps } from "../../../lib/types/banner";
 
 withDefaults(
-  defineProps<{
-    duration?: number
-  }>(),
+  defineProps<MarqueeItemProps>(),
   {
     duration: 60, // makin besar = makin smooth
-  }
-)
+  },
+);
 
 </script>
 

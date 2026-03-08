@@ -49,7 +49,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue";
-import type { GridOption } from "../hero.data";
+import type { GridOption } from "../../../lib/types/hero";
 
 const props = defineProps<{
   isOpen: boolean;

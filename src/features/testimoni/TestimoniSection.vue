@@ -21,14 +21,7 @@ import TestimonialCard from "./components/TestimonialCard.vue";
 import testiImage1 from "../../assets/images/testi1.svg";
 import testiImage2 from "../../assets/images/testi2.svg";
 import testiImage3 from "../../assets/images/testi3.svg";
-
-type Testimonial = {
-  id: number;
-  name: string;
-  role: string;
-  quote: string;
-  image: string;
-};
+import type { Testimonial } from "../../lib/types/testimoni";
 
 const testimonials = ref<Testimonial[]>([
   {

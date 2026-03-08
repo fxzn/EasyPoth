@@ -92,8 +92,9 @@ import productOne from "../../../assets/images/ProductOne.svg";
 import productTwoe from "../../../assets/images/ProductTwoe.svg";
 import productThree from "../../../assets/images/ProductThree.svg";
 import productFour from "../../../assets/images/ProductFour.svg";
+import type { CollectionFrame } from "../../../lib/types/collection";
 
-const frames = ref([
+const frames = ref<CollectionFrame[]>([
   {
     id: 1,
     author: "John Doe",

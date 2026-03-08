@@ -2,21 +2,21 @@
   <div class="relative z-10 text-center text-white max-w-5xl mx-auto">
     <!-- Title -->
     <h2 class="text-5xl lg:text-6xl font-medium mb-4 leading-tight">
-      Ubah Desainmu Jadi Penghasilan
+      {{ content.title }}
     </h2>
 
     <!-- Description -->
     <p
       class="text-xl lg:text-2xl text-purple-100 mb-12 leading-[1.3] font-normal max-w-3xl mx-auto"
     >
-      Ubah ide kreatifmu jadi frame menarik dan mulai hasilkan uang sekarang.
+      {{ content.description }}
     </p>
 
     <!-- CTA Button -->
     <button
       class="group inline-flex items-center gap-3 bg-white text-gray-900 font-semibold px-10 py-4 rounded-full transition-all duration-300 hover:bg-gray-100"
     >
-      <span>Gabung sebagai contributor</span>
+      <span>{{ content.ctaLabel }}</span>
 
       <svg
         class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1"
@@ -35,6 +35,15 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type { CtaContent } from "../../../lib/types/cta";
+
+const content: CtaContent = {
+  title: "Ubah Desainmu Jadi Penghasilan",
+  description:
+    "Ubah ide kreatifmu jadi frame menarik dan mulai hasilkan uang sekarang.",
+  ctaLabel: "Gabung sebagai contributor",
+};
+</script>
 
 <style scoped></style>

@@ -45,10 +45,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref } from "vue";
+import type { FaqStep } from "../../../lib/types/faq";
 
 
-const steps = ref([
+const steps = ref<FaqStep[]>([
   {
     id: 1,
     number: "01",
