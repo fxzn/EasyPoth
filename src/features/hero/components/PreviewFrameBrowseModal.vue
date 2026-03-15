@@ -1,10 +1,10 @@
 <template>
   <dialog ref="dialogRef" class="modal modal-middle" @close="emit('close')">
-    <div class="modal-box w-[390px] max-w-[92vw] max-h-[88vh] p-0 rounded-[14px] bg-white shadow-2xl overflow-hidden">
-      <div class="px-5 pt-5 pb-4 border-b border-gray-200">
+    <div class="modal-box w-[430px] max-w-[88vw] max-h-[90vh] p-0 rounded-[18px] bg-white shadow-2xl overflow-hidden">
+      <div class="px-4 md:px-5 pt-4 md:pt-5 pb-3 border-b border-gray-200">
         <div class="flex items-start justify-between gap-3">
-          <h3 class="text-[24px] leading-none font-medium text-[#1F2937]">Pilih frame</h3>
-          <label class="w-[180px] pt-1">
+          <h3 class="text-[22px] leading-[1.05] font-medium tracking-[-0.01em] text-[#0B132B]">Pilih frame</h3>
+          <label class="w-[160px] md:w-[180px] pt-1">
             <div class="flex items-center gap-2 border-b border-gray-600 pb-1">
               <input
                 id="frame-search-input"
@@ -22,7 +22,7 @@
         </div>
       </div>
 
-      <div class="px-5 py-4 overflow-y-auto max-h-[60vh]">
+      <div class="px-4 md:px-5 py-4 overflow-y-auto max-h-[60vh]">
         <div v-if="pagedCards.length > 0" class="grid grid-cols-2 gap-x-3 gap-y-4">
           <button
             v-for="item in pagedCards"
@@ -56,10 +56,10 @@
         </div>
       </div>
 
-      <div class="px-5 pb-5 pt-3 border-t border-gray-200 flex items-center justify-between">
+      <div class="px-4 md:px-5 pb-4 md:pb-5 pt-3 border-t border-gray-200 flex items-center justify-between">
         <button
           @click="emit('close')"
-          class="btn btn-sm h-9 min-h-0 rounded-full px-6 border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 shadow-none"
+          class="btn btn-sm h-10 min-h-0 rounded-full px-5 border border-gray-300 bg-white text-xs font-semibold text-gray-800 hover:bg-gray-50 shadow-none"
         >
           Kembali
         </button>
@@ -69,7 +69,7 @@
             @click="goPrevPage"
             :disabled="isFirstPage"
             :class="[
-              'group btn btn-sm btn-circle h-9 min-h-0 w-9 border transition-all duration-200 shadow-none',
+              'group btn btn-sm btn-circle h-10 min-h-0 w-10 border transition-all duration-200 shadow-none',
               isFirstPage
                 ? 'border-gray-300 bg-white text-gray-700 cursor-not-allowed'
                 : 'border-[#ebe5f6] bg-[#ebe5f6] text-[#7C3AED] hover:bg-[#ebe5f6] hover:border-[#ebe5f6]',
@@ -89,7 +89,7 @@
             @click="goNextPage"
             :disabled="isLastPage"
             :class="[
-              'group btn btn-sm btn-circle h-9 min-h-0 w-9 border transition-all duration-200 shadow-none',
+              'group btn btn-sm btn-circle h-10 min-h-0 w-10 border transition-all duration-200 shadow-none',
               isLastPage
                 ? 'border-gray-300 bg-white text-gray-700 cursor-not-allowed'
                 : 'border-[#ebe5f6] bg-[#ebe5f6] text-[#7C3AED] hover:bg-[#ebe5f6] hover:border-[#ebe5f6]',

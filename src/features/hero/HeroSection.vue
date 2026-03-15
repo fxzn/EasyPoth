@@ -20,7 +20,7 @@
     :selected-grid="selectedGrid"
     :grid-options="gridOptions"
     @update:selected-grid="selectedGrid = $event"
-    @start="startCamera"
+    @start="startCamera($event)"
     @close="isFrameModalOpen = false"
   />
 
@@ -38,7 +38,7 @@
     <div
       class="modal-box w-[360px] max-w-[92vw] p-0 rounded-[18px] bg-[#0B0B12] overflow-hidden shadow-2xl"
     >
-      <div class="relative aspect-[9/16] bg-black">
+      <div class="relative aspect-[9/12] bg-black">
         <video
           ref="videoEl"
           autoplay
@@ -176,15 +176,15 @@
 
   <dialog ref="previewModalRef" class="modal modal-middle">
     <div
-      class="modal-box w-[500px] max-w-[92vw] max-h-[90vh] rounded-[18px] p-5 md:p-6 bg-white shadow-2xl overflow-x-hidden overflow-y-auto"
+      class="modal-box w-[430px] max-w-[88vw] max-h-[90vh] rounded-[18px] p-4 md:p-5 bg-white shadow-2xl overflow-hidden flex flex-col"
     >
       <h3
-        class="mb-4 text-[24px] leading-[1.05] font-medium tracking-[-0.01em] text-[#0B132B]"
+        class="mb-4 text-[22px] leading-[1.05] font-medium tracking-[-0.01em] text-[#0B132B]"
       >
         Lihat hasil foto
       </h3>
 
-      <div class="">
+      <div class="min-h-0 flex items-center justify-center">
         <div class="relative" :style="getPreviewContainerStyle()">
           <template v-if="activeGrid">
             <img
@@ -249,16 +249,16 @@
         </div>
       </div>
 
-      <div class="mt-4 flex flex-col gap-3">
+      <div class="mt-4 flex flex-col gap-2">
         <button
           @click="handlePreviewPrimaryAction"
-          class="w-full h-14 rounded-full text-base font-semibold text-white bg-gradient-to-r from-[#7C3AED] to-[#8B5CF6] hover:brightness-95 active:scale-[0.995] transition-all"
+          class="w-full h-10 rounded-full text-xs font-semibold text-white bg-gradient-to-r from-[#7C3AED] to-[#8B5CF6] hover:brightness-95 active:scale-[0.995] transition-all"
         >
           {{ previewPrimaryButtonLabel }}
         </button>
         <button
           @click="closeAll"
-          class="w-full h-14 rounded-full text-base font-semibold border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 active:scale-[0.995] transition-all"
+          class="w-full h-10 rounded-full text-xs font-semibold border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 active:scale-[0.995] transition-all"
         >
           Tutup
         </button>
@@ -433,8 +433,15 @@ function getPreviewGap(gridId: string): string {
 
 function getPreviewContainerStyle(): Record<string, string> {
   const preset = getTemplatePreviewPreset();
-  if (preset) return { aspectRatio: preset.aspectRatio };
-  return { aspectRatio: "3 / 4" };
+  const aspectRatio = preset ? preset.aspectRatio : "3 / 4";
+  const ratioExpr = aspectRatio.replace(/\s+/g, "");
+  const previewMaxHeight = "56vh";
+
+  return {
+    aspectRatio,
+    maxHeight: previewMaxHeight,
+    width: `min(100%, calc(${previewMaxHeight} * (${ratioExpr})))`,
+  };
 }
 
 function getPreviewPhotoRadius(): string {
@@ -457,7 +464,8 @@ function openFrameModal() {
   isFrameModalOpen.value = true;
 }
 
-async function startCamera() {
+async function startCamera(gridId?: string) {
+  if (gridId) selectedGrid.value = gridId;
   if (!activeGrid.value) return;
   capturedPhotos.value = [];
 
@@ -465,7 +473,7 @@ async function startCamera() {
     stream = await navigator.mediaDevices.getUserMedia({
       video: {
         facingMode: isFrontCamera.value ? "user" : "environment",
-        aspectRatio: 3 / 4,
+        aspectRatio: 9 / 12,
       },
       audio: false,
     });
